@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Inspection</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f4f0;
+      font-family: 'DM Sans', sans-serif;
+      padding: 2rem 1rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: #ffffff;
+      border: 0.5px solid rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      position: relative;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #7F77DD, #5DCAA5);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2rem;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #EEEDFE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #534AB7;
+      font-size: 18px;
+    }
+
+    .brand-name {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 300;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+    }
+
+    .login-title {
+      font-family: 'Fraunces', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 2rem;
+    }
+
+    .field { margin-bottom: 1.25rem; }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: #666;
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrap i {
+      position: absolute;
+      left: 12px;
+      font-size: 16px;
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 10px 12px 10px 38px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      background: #f9f9f7;
+      border: 0.5px solid rgba(0,0,0,0.12);
+      border-radius: 8px;
+      color: #1a1a1a;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .input-wrap input:focus {
+      border-color: #7F77DD;
+      box-shadow: 0 0 0 3px rgba(127, 119, 221, 0.12);
+    }
+
+    .eye-btn {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: #aaa;
+      cursor: pointer;
+      padding: 2px;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .eye-btn:hover { color: #666; }
+
+    .row-opts {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: #666;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .remember input[type=checkbox] {
+      width: 15px;
+      height: 15px;
+      accent-color: #534AB7;
+      cursor: pointer;
+    }
+
+    .forgot {
+      font-size: 13px;
+      color: #534AB7;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .forgot:hover { text-decoration: underline; }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: #534AB7;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-login:hover { background: #3C3489; }
+    .btn-login:active { transform: scale(0.98); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 1.5rem 0;
+      color: #bbb;
+      font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 0.5px;
+      background: rgba(0,0,0,0.1);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 10px;
+      background: #fff;
+      border: 0.5px solid rgba(0,0,0,0.15);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.12s;
+    }
+
+    .btn-google:hover { background: #f5f4f0; }
+
+    .google-icon { width: 16px; height: 16px; }
+
+    .signup-hint {
+      text-align: center;
+      font-size: 13px;
+      color: #888;
+      margin-top: 1.5rem;
+    }
+
+    .signup-hint a {
+      color: #534AB7;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .signup-hint a:hover { text-decoration: underline; }
+
+    .toast {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #3C3489;
+      color: #fff;
+      font-size: 13px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      white-space: nowrap;
+      z-index: 999;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast"></div>
+
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="ti ti-tool"></i>
+      </div>
+      <span class="brand-name">Inspection Your Tools</span>
+    </div>
+
+    <h1 class="login-title">Selamat datang</h1>
+    <p class="login-sub">Masuk untuk melanjutkan ke akun kamu</p>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <div class="input-wrap">
+        <i class="ti ti-mail"></i>
+        <input type="email" id="email" placeholder="dirimu@email.com" autocomplete="email"/>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <i class="ti ti-lock"></i>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"/>
+        <button class="eye-btn" id="eyeBtn" aria-label="Tampilkan password" onclick="togglePass()">
+          <i class="ti ti-eye" id="eyeIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row-opts">
+      <label class="remember">
+        <input type="checkbox" id="remember"/>
+        Ingat saya
+      </label>
+    </div>
+
+    <button class="btn-login" onclick="handleLogin()">
+      <i class="ti ti-login"></i>
+      Masuk
+    </button>
+
+  <script>
+    function togglePass() {
+      const inp = document.getElementById('password');
+      const icon = document.getElementById('eyeIcon');
+      const btn = document.getElementById('eyeBtn');
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'ti ti-eye-off';
+        btn.setAttribute('aria-label', 'Sembunyikan password');
+      } else {
+        inp.type = 'password';
+        icon.className = 'ti ti-eye';
+        btn.setAttribute('aria-label', 'Tampilkan password');
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2500);
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('password').value;
+      if (!email) { showToast('Masukkan email kamu dulu ya!'); return; }
+      if (!pass)  { showToast('Jangan lupa passwordnya!'); return; }
+      if (!email.includes('@')) { showToast('Format email tidak valid'); return; }
+      showToast('Berhasil masuk! ✓');
+    }
+
+    function handleGoogle() {
+      showToast('Menghubungkan ke Google...');
+    }
+  </script>
+
+</body>
+</html>

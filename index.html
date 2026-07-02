@@ -2,894 +2,1617 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SPIP Management
-</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>AGS — Analysis & Growth System</title>
+<link rel="manifest" href="manifest.json">
+<link rel="config" href="config.js">
+<meta name="theme-color" content="#0a0f0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AGS">
+<link rel="apple-touch-icon" href="icon-180.png">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --bg:#f1f5f9; --bg2:#ffffff; --bg3:#f8fafc; --bg4:#f1f5f9; --bg5:#e2e8f0;
-  --line:#e2e8f0; --line2:#cbd5e1; --line3:#94a3b8;
-  --text:#0f172a; --text2:#475569; --text3:#94a3b8;
-  --accent:#2563eb; --accent-d:#1d4ed8; --accent-lt:#eff6ff;
-  --green:#16a34a; --green-lt:#f0fdf4;
-  --yellow:#d97706; --yellow-lt:#fffbeb;
-  --red:#dc2626; --red-lt:#fef2f2;
-  --orange:#ea580c; --orange-lt:#fff7ed;
-  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
-  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.05);
-  --mono:'JetBrains Mono',monospace; --sans:'Inter',system-ui,sans-serif;
-  --r:8px; --rl:10px;
+:root {
+  --bg: #0a0f0a;
+  --sidebar: #0d130d;
+  --panel: #111a11;
+  --panel2: #0e160e;
+  --line: #1e2d1e;
+  --green: #22c55e;
+  --green2: #16a34a;
+  --gold: #f0b429;
+  --red: #ef4444;
+  --blue: #3b82f6;
+  --text: #e2ede2;
+  --muted: #6b7f6b;
+  --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --sidebar-w: 220px;
 }
-html,body{height:100%;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);display:flex;font-size:13.5px;overflow:hidden;height:100vh;}
-::-webkit-scrollbar{width:5px;}
-::-webkit-scrollbar-track{background:var(--bg3);}
-::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px;}
-
-/* ── SIDEBAR ── */
-.sidebar{width:230px;min-width:230px;background:var(--bg2);border-right:1px solid var(--line);display:flex;flex-direction:column;height:100vh;box-shadow:var(--shadow);}
-.logo-wrap{padding:18px 16px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
-.logo-mark{width:34px;height:34px;background:var(--accent);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(37,99,235,0.3);}
-.logo-mark svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.logo-title{font-size:15px;font-weight:700;letter-spacing:-0.3px;color:var(--text);}
-.logo-title span{color:var(--accent);}
-.logo-sub{font-size:10px;color:var(--text3);margin-top:1px;font-family:var(--mono);}
-.nav{flex:1;padding:12px 10px;overflow-y:auto;}
-.nav-group-label{font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:10px 8px 5px;}
-.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);color:var(--text2);cursor:pointer;transition:all 0.13s;margin-bottom:1px;font-size:13px;user-select:none;position:relative;}
-.nav-item:hover{background:var(--bg3);color:var(--text);}
-.nav-item.active{background:var(--accent-lt);color:var(--accent);font-weight:500;}
-.nav-item.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;background:var(--accent);border-radius:2px;}
-.nav-icon{width:15px;height:15px;flex-shrink:0;}
-.nav-pill{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;font-family:var(--mono);}
-.nav-pill.red{background:var(--red);}
-.sidebar-footer{padding:10px;border-top:1px solid var(--line);}
-.user-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;transition:background 0.13s;}
-.user-row:hover{background:var(--bg3);}
-.ava{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;}
-.user-name{font-size:13px;font-weight:600;}
-.user-role{font-size:10.5px;color:var(--text3);margin-top:1px;}
-
-/* ── MAIN ── */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
-.topbar{height:56px;background:var(--bg2);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;box-shadow:var(--shadow);}
-.page-breadcrumb{flex:1;font-size:15px;font-weight:700;color:var(--text);}
-.topbar-mono{font-family:var(--mono);font-size:11.5px;color:var(--text3);}
-.tb-btn{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--r);border:1px solid var(--line2);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--sans);font-size:13px;transition:all 0.13s;}
-.tb-btn:hover{background:var(--bg3);color:var(--text);border-color:var(--line3);}
-.tb-btn.primary{background:var(--accent);border-color:transparent;color:white;font-weight:500;box-shadow:0 2px 8px rgba(37,99,235,0.25);}
-.tb-btn.primary:hover{background:var(--accent-d);}
-.views{flex:1;overflow-y:auto;background:var(--bg);}
-.view{display:none;padding:22px 24px 40px;}
-.view.on{display:block;}
-
-/* ── KPI / DASHBOARD ── */
-.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
-.kpi{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:16px 18px 14px;position:relative;overflow:hidden;cursor:default;transition:box-shadow 0.2s;box-shadow:var(--shadow);}
-.kpi:hover{box-shadow:var(--shadow-md);}
-.kpi-accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;}
-.kpi-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;}
-.kpi-num{font-size:28px;font-weight:700;letter-spacing:-1px;line-height:1;margin-bottom:4px;font-family:var(--mono);}
-.kpi-desc{font-size:11.5px;color:var(--text2);}
-.dash-grid{display:grid;grid-template-columns:1fr 320px;gap:14px;margin-bottom:14px;}
-.card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:16px 18px;box-shadow:var(--shadow);}
-.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.card-title{font-size:13.5px;font-weight:600;}
-.card-link{font-size:12px;color:var(--accent);cursor:pointer;}
-.card-link:hover{text-decoration:underline;}
-.tbl{width:100%;border-collapse:collapse;}
-.tbl th{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.07em;padding:0 0 9px;text-align:left;border-bottom:1px solid var(--line);}
-.tbl td{padding:10px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--line);vertical-align:middle;}
-.tbl tr:last-child td{border-bottom:none;}
-.tbl tr:hover td{color:var(--text);background:var(--bg3);}
-.tbl .em{color:var(--text);font-weight:600;font-family:var(--mono);font-size:11.5px;}
-.tbl th:not(:first-child),.tbl td:not(:first-child){padding-left:12px;}
-.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;}
-.bg-green{background:var(--green-lt);color:var(--green);}
-.bg-yellow{background:var(--yellow-lt);color:var(--yellow);}
-.bg-red{background:var(--red-lt);color:var(--red);}
-.bg-orange{background:var(--orange-lt);color:var(--orange);}
-.bg-blue{background:var(--accent-lt);color:var(--accent);}
-.bg-gray{background:var(--bg3);color:var(--text2);border:1px solid var(--line);}
-.bdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.act-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);}
-.act-item:last-child{border-bottom:none;}
-.act-dot-c{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
-.act-text{font-size:12.5px;color:var(--text);}
-.act-time{font-size:10.5px;color:var(--text3);margin-top:1px;font-family:var(--mono);}
-.progbar{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin-top:6px;}
-.progfill{height:100%;border-radius:3px;transition:width 0.5s ease;}
-
-/* ── FORM STEPS ── */
-.form-step-header{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:0;box-shadow:var(--shadow);}
-.fsh-item{display:flex;align-items:center;gap:7px;}
-.fsh-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:2px solid var(--line2);background:var(--bg3);color:var(--text3);transition:all 0.2s;flex-shrink:0;font-family:var(--mono);}
-.fsh-dot.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 10px rgba(37,99,235,0.3);}
-.fsh-dot.done{background:var(--green);border-color:var(--green);color:#fff;}
-.fsh-lbl{font-size:12px;color:var(--text3);font-weight:500;white-space:nowrap;}
-.fsh-lbl.active{color:var(--accent);}
-.fsh-lbl.done{color:var(--green);}
-.fsh-line{flex:1;height:2px;background:var(--line2);margin:0 8px;transition:background 0.3s;}
-.fsh-line.done{background:var(--green);}
-.fid-badge{font-size:11px;color:var(--accent);background:var(--accent-lt);border:1px solid #bfdbfe;padding:3px 10px;border-radius:20px;font-family:var(--mono);margin-left:auto;white-space:nowrap;}
-
-.form-wrap{display:grid;grid-template-columns:1fr 268px;gap:16px;align-items:start;}
-.form-col{}
-.form-aside{position:sticky;top:0;}
-.fsec{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:18px 20px;margin-bottom:14px;box-shadow:var(--shadow);}
-.fsec-title{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line);}
-.fsec-title svg{width:13px;height:13px;flex-shrink:0;}
-.fsec-subtitle{font-size:10px;font-weight:700;color:#0369a1;text-transform:uppercase;letter-spacing:0.07em;padding:8px 0 8px;border-bottom:1px solid var(--line);margin-bottom:4px;margin-top:8px;background:#f0f9ff;padding-left:8px;border-radius:4px;}
-
-/* fields */
-.field{margin-bottom:12px;}
-.field:last-child{margin-bottom:0;}
-.lbl{display:block;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px;}
-.lbl .req{color:var(--red);}
-input[type=text],input[type=date],input[type=time],select,textarea{
-  width:100%;background:var(--bg3);border:1.5px solid var(--line);border-radius:var(--r);color:var(--text);
-  padding:8px 11px;font-family:var(--sans);font-size:13.5px;outline:none;
-  transition:border-color 0.15s,box-shadow 0.15s;-webkit-appearance:none;
+html[data-theme="light"] {
+  --bg: #f0f7f0; --sidebar: #e8f5e8; --panel: #ffffff;
+  --panel2: #f0f7f0; --line: #d0e8d0; --text: #1a2e1a; --muted: #5a7a5a;
 }
-input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08);background:#fff;}
-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px;}
-textarea{resize:vertical;min-height:78px;line-height:1.55;}
-.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
-.ios-wrap{display:flex;flex-direction:column;gap:5px;}
-.manual-toggle{font-size:11px;color:var(--accent);cursor:pointer;font-weight:500;background:none;border:none;padding:0;font-family:var(--sans);text-align:left;text-decoration:underline;text-underline-offset:2px;}
-.manual-toggle:hover{color:var(--accent-d);}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); display: flex; min-height: 100vh; }
 
-/* tools grid */
-.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
-.tool-cat{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;padding:8px 0 4px;grid-column:1/-1;border-bottom:1px solid var(--line);}
-.tool-opt input{display:none;}
-.tool-opt label{display:flex;align-items:center;gap:7px;padding:9px 11px;border-radius:var(--r);border:1.5px solid var(--line);cursor:pointer;font-size:12.5px;font-weight:400;transition:all 0.13s;color:var(--text2);background:var(--bg3);}
-.tool-opt label:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt);}
-.tool-opt input:checked+label{border-color:var(--accent);color:var(--accent);background:var(--accent-lt);font-weight:500;}
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); background: var(--sidebar); border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;
+  transition: transform .3s;
+}
+.sidebar-logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--line); }
+.sidebar-logo .logo-icon { font-size: 28px; margin-bottom: 4px; }
+.sidebar-logo .logo-name { font-size: 18px; font-weight: 800; color: var(--green); letter-spacing: .5px; }
+.sidebar-logo .logo-sub { font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+.sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; font-size: 13.5px; font-weight: 500;
+  color: var(--muted); margin-bottom: 2px; transition: .15s; border: 1px solid transparent;
+}
+.nav-item:hover { background: var(--panel2); color: var(--text); }
+.nav-item.active { background: rgba(34,197,94,.12); color: var(--green); border-color: rgba(34,197,94,.3); font-weight: 700; }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-bottom { padding: 12px 8px; border-top: 1px solid var(--line); }
+.discipline-box { background: var(--panel2); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 10px; text-align: center; }
+.discipline-box .disc-label { font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.disc-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; margin: 4px 0; }
+.disc-ring svg { transform: rotate(-90deg); }
+.disc-ring .disc-num { position: absolute; font-size: 18px; font-weight: 800; color: var(--green); font-family: var(--mono); }
+.disc-msg { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.theme-btn {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: var(--panel2); border: 1px solid var(--line); color: var(--muted);
+  padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 12px; font-family: var(--sans);
+}
 
-/* checklist */
-.cl-header{display:grid;grid-template-columns:1fr 140px;padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0;}
-.cl-header span{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
-.cl-header span:last-child{text-align:center;}
-.cl-item{display:grid;grid-template-columns:1fr 140px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);transition:background 0.1s;}
-.cl-item:last-child{border-bottom:none;}
-.cl-item:hover{background:var(--bg3);}
-.cl-no{font-size:10px;font-weight:600;color:var(--text3);margin-bottom:2px;font-family:var(--mono);}
-.cl-text{font-size:13px;color:var(--text2);line-height:1.4;}
-.yn{display:flex;gap:4px;justify-content:center;}
-.yn input{display:none;}
-.yn label{padding:5px 9px;border-radius:6px;border:1.5px solid var(--line2);font-size:11px;font-weight:600;cursor:pointer;color:var(--text3);background:var(--bg2);transition:all 0.13s;margin:0;}
-.yn label:hover{border-color:var(--line3);}
-.yn input[value="Ya"]:checked+label{border-color:var(--green);color:var(--green);background:var(--green-lt);}
-.yn input[value="Tidak"]:checked+label{border-color:var(--red);color:var(--red);background:var(--red-lt);}
-.yn input[value="NA"]:checked+label{border-color:var(--line3);color:var(--text2);background:var(--bg3);}
+/* MAIN */
+.main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(14px + env(safe-area-inset-top)) 20px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--sidebar); position: sticky; top: 0; z-index: 50;
+}
+.topbar-left .greeting { font-size: 18px; font-weight: 800; }
+.topbar-left .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.topbar-right { text-align: right; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.topbar-right .live-time { font-size: 15px; font-weight: 700; color: var(--text); }
 
-/* ng alert */
-.ng-alert{display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:13px;color:#92400e;align-items:center;gap:8px;}
-.ng-alert.show{display:flex;}
+.content { padding: 16px 20px; }
 
-/* risiko */
-.risiko-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
-.risiko-opt input{display:none;}
-.risiko-opt label{display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 8px;border-radius:var(--r);border:1.5px solid var(--line);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.15s;text-align:center;color:var(--text2);background:var(--bg3);}
-.risiko-opt label span.ri-lv{font-size:14px;font-weight:700;font-family:var(--mono);}
-.risiko-opt label span.ri-sub{font-size:10px;font-weight:400;color:inherit;opacity:0.7;}
-.risiko-opt input[value="Low"]:checked+label{border-color:var(--green);color:var(--green);background:var(--green-lt);}
-.risiko-opt input[value="Medium"]:checked+label{border-color:var(--yellow);color:var(--yellow);background:var(--yellow-lt);}
-.risiko-opt input[value="High"]:checked+label{border-color:var(--orange);color:var(--orange);background:var(--orange-lt);}
-.risiko-opt input[value="Critical"]:checked+label{border-color:var(--red);color:var(--red);background:var(--red-lt);}
+.sidebar-logo { 
+  padding: calc(20px + env(safe-area-inset-top)) 16px 16px; 
+  border-bottom: 1px solid var(--line); 
+}
+  
+/* CARDS */
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+.card-title { font-size: 10px; text-transform: uppercase; letter-spacing: .8px; color: var(--green); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
 
-/* foto */
-.foto-zone{border:2px dashed var(--line2);border-radius:var(--r);padding:20px;text-align:center;cursor:pointer;color:var(--text3);font-size:13px;transition:all 0.13s;position:relative;background:var(--bg3);}
-.foto-zone:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-lt);}
-.foto-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.foto-zone svg{width:24px;height:24px;margin:0 auto 7px;display:block;}
-.foto-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
-.fp-item{position:relative;}
-.fp-item img{width:66px;height:66px;object-fit:cover;border-radius:var(--r);border:2px solid var(--line);}
-.fp-del{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--red);border-radius:50%;border:2px solid white;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;}
-.foto-status{font-size:12px;margin-top:6px;font-weight:500;}
-.foto-status.uploading{color:var(--yellow);}
-.foto-status.done{color:var(--green);}
+/* GRID LAYOUTS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+.gap-14 { gap: 14px; }
+.mb-14 { margin-bottom: 14px; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
 
-/* buttons */
-.fnav{display:flex;gap:10px;margin-top:4px;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r);border:1.5px solid var(--line2);background:var(--bg2);color:var(--text2);cursor:pointer;font-family:var(--sans);font-size:13.5px;transition:all 0.13s;}
-.btn:hover{background:var(--bg3);color:var(--text);border-color:var(--line3);}
-.btn:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed;border-color:var(--line);}
-.btn svg{width:14px;height:14px;}
-.btn-primary{background:var(--accent);border-color:transparent;color:white;font-weight:600;box-shadow:0 2px 8px rgba(37,99,235,0.2);}
-.btn-primary:hover{background:var(--accent-d);}
-.btn-green{background:var(--green);border-color:transparent;color:#fff;font-weight:600;}
-.btn-green:hover{background:#15803d;}
-.btn-block{width:100%;margin-bottom:8px;}
+/* DASHBOARD GRID */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 14px;
+}
+.dash-grid .span-2 { grid-column: span 2; }
 
-/* aside */
-.prog-ring-wrap{text-align:center;padding:10px 0 14px;}
-.prog-big{font-size:34px;font-weight:700;color:var(--accent);font-family:var(--mono);}
-.prog-lbl{font-size:11px;color:var(--text3);margin-top:2px;}
-.stat-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px;}
-.stat-mini{background:var(--bg3);border-radius:var(--r);padding:9px 10px;text-align:center;border:1px solid var(--line);}
-.stat-mini-val{font-size:18px;font-weight:700;font-family:var(--mono);}
-.stat-mini-lbl{font-size:10px;color:var(--text3);margin-top:1px;}
-.status-row{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;padding:7px 0;border-bottom:1px solid var(--line);}
-.status-row:last-child{border-bottom:none;}
-.status-key{color:var(--text2);}
+/* MISSION */
+.mission-item { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.mission-item:last-child { border-bottom: none; }
+.mission-done { display: flex; align-items: center; gap: 6px; }
+.mission-done .ico { font-size: 14px; }
+.mission-badge { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; font-family: var(--mono); }
+.badge-green { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+.badge-gold { background: rgba(240,180,41,.15); color: var(--gold); border: 1px solid rgba(240,180,41,.3); }
+.badge-red { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+.mission-quote { font-size: 11px; color: var(--green); margin-top: 8px; font-style: italic; }
 
-/* LIST / TABLE VIEWS */
-.filter-bar{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
-.search-inp{flex:1;background:var(--bg2);border:1.5px solid var(--line);border-radius:var(--r);color:var(--text);padding:8px 13px;font-family:var(--sans);font-size:13.5px;outline:none;box-shadow:var(--shadow);}
-.search-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.08);}
-.flt-sel{background:var(--bg2);border:1.5px solid var(--line);border-radius:var(--r);color:var(--text2);padding:8px 11px;font-family:var(--sans);font-size:13px;outline:none;cursor:pointer;box-shadow:var(--shadow);}
-.flt-sel:focus{border-color:var(--accent);}
+/* MARKET OVERVIEW */
+.market-card { border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.market-name { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+.market-price { font-size: 20px; font-weight: 800; font-family: var(--mono); margin: 3px 0; }
+.market-change { font-size: 11px; margin-bottom: 6px; }
+.market-sparkline { height: 36px; }
+.market-trend { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-top: 4px; }
+.trend-bull { background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.3); }
+.trend-bear { background: rgba(239,68,68,.15); color: var(--red); border: 1px solid rgba(239,68,68,.3); }
+.trend-side { background: rgba(240,180,41,.15); color: var(--gold); border: 1px solid rgba(240,180,41,.3); }
 
-/* WAITING & OVERDUE */
-.wo-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.wo-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:16px 18px;box-shadow:var(--shadow);}
-.wo-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.wo-title{font-size:14px;font-weight:700;}
-.wo-count{font-size:22px;font-weight:700;font-family:var(--mono);}
-.wi-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
-.wi-item:last-child{border-bottom:none;}
-.wi-left{flex:1;min-width:0;}
-.wi-name{font-size:13px;font-weight:500;color:var(--text);}
-.wi-sub{font-size:11.5px;color:var(--text3);margin-top:2px;}
-.wi-right{text-align:right;flex-shrink:0;}
-.wi-due{font-size:11px;color:var(--text3);font-family:var(--mono);}
-.wi-badge{}
-.overdue-bar{height:4px;border-radius:2px;background:var(--bg4);margin-top:4px;}
-.overdue-fill{height:100%;border-radius:2px;}
+/* JOURNAL TABLE */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl th { color: var(--muted); font-weight: 600; text-align: left; padding: 6px 8px; font-size: 10px; letter-spacing: .5px; border-bottom: 1px solid var(--line); }
+.tbl td { padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--panel2); }
+.sym-icon { width: 24px; height: 24px; border-radius: 6px; background: var(--green); display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; margin-right: 6px; }
+.badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.buy { color: var(--green); } .sell { color: var(--red); }
+.win { color: var(--green); font-weight: 700; }
+.loss { color: var(--red); font-weight: 700; }
+.be { color: var(--gold); font-weight: 700; }
+.open { color: var(--blue); font-weight: 700; }
+.pl-pos { color: var(--green); font-family: var(--mono); font-weight: 700; }
+.pl-neg { color: var(--red); font-family: var(--mono); font-weight: 700; }
 
-/* PIC LIST */
-.pic-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.pic-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--rl);padding:14px 16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;}
-.pic-ava{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
-.pic-name{font-size:13px;font-weight:600;}
-.pic-area{font-size:11.5px;color:var(--text3);margin-top:1px;}
-.pic-email{font-size:11px;color:var(--accent);margin-top:3px;font-family:var(--mono);}
-.pic-status{margin-left:auto;flex-shrink:0;}
+/* UPCOMING / NEWS */
+.news-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 12.5px; }
+.news-item:last-child { border-bottom: none; }
+.news-time { font-family: var(--mono); font-size: 11px; color: var(--muted); width: 40px; flex-shrink: 0; }
+.news-flag { font-size: 16px; }
+.news-name { flex: 1; }
+.news-impact { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.high { background: var(--red); box-shadow: 0 0 5px var(--red); }
+.med { background: var(--gold); }
+.low { background: var(--green); }
 
-/* OVERLAY */
-.ov{display:none;position:fixed;inset:0;background:rgba(15,23,42,.4);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.ov.show{display:flex;}
-.ov-card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:32px 26px;text-align:center;max-width:290px;width:90%;box-shadow:0 20px 50px rgba(0,0,0,.15);animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);}
-@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
-.ov-icon{font-size:44px;margin-bottom:10px;}
-.ov-title{font-size:17px;font-weight:700;margin-bottom:6px;}
-.ov-title.ok{color:var(--green);}
-.ov-title.err{color:var(--red);}
-.ov-msg{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:18px;white-space:pre-line;}
-.sp{width:15px;height:15px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite;display:none;}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ====== TOP ROW (mission + market overview / global news / berita id) ====== */
+.dash-top { display: grid; grid-template-columns: 1fr 1.35fr 1.35fr; gap: 14px; align-items: start; }
+.dash-left-col { display: flex; flex-direction: column; gap: 14px; }
+.dash-bottom { display: grid; grid-template-columns: 1.4fr 0.9fr 1.4fr; gap: 14px; margin-top: 14px; align-items: start; }
+@media (max-width: 1100px) {
+  .dash-top, .dash-bottom { grid-template-columns: 1fr; }
+}
+
+/* MARKET OVERVIEW (mini, mockup style: gold/usd/dxy stacked) */
+.mkt-mini-grid { display: flex; flex-direction: column; gap: 10px; }
+.mkt-mini { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; }
+.mkt-mini-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; background: var(--panel2); }
+.mkt-mini-body { flex: 1; min-width: 0; }
+.mkt-mini-label { font-size: 9.5px; color: var(--muted); letter-spacing: .3px; }
+.mkt-mini-sub { font-size: 9px; color: var(--muted); }
+.mkt-mini-price { font-size: 16px; font-weight: 800; font-family: var(--mono); }
+.mkt-mini-chg { font-size: 10.5px; font-weight: 600; }
+.mkt-mini-spark { width: 60px; height: 28px; flex-shrink: 0; }
+.mkt-mini-range { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--muted); margin-top: 4px; font-family: var(--mono); }
+
+/* NEWS LIST WITH THUMBNAIL */
+.news-card-list { display: flex; flex-direction: column; }
+.news-row { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.news-row:last-child { border-bottom: none; }
+.news-thumb { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: var(--panel2); }
+.news-row-body { flex: 1; min-width: 0; }
+.news-row-title { font-size: 12.5px; font-weight: 700; line-height: 1.35; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-row-meta { font-size: 10.5px; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.news-row-tag { font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 20px; flex-shrink: 0; height: fit-content; }
+.card-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.card-source-sub { font-size: 9.5px; color: var(--muted); margin: -6px 0 8px; }
+.news-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.news-tab { font-size: 11px; padding: 4px 10px; border-radius: 20px; cursor: pointer; color: var(--muted); border: 1px solid transparent; }
+.news-tab.active { background: rgba(34,197,94,.15); color: var(--green); border-color: rgba(34,197,94,.3); font-weight: 700; }
+
+/* MARKET IMPACT */
+.impact-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.impact-row:last-child { border-bottom: none; }
+.impact-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.impact-body { flex: 1; min-width: 0; }
+.impact-top { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; }
+.impact-bias { font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+.impact-bar-bg { height: 5px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.impact-bar-fill { height: 100%; border-radius: 4px; }
+
+/* QUICK ACTION */
+.qa-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 3px;
+  background: var(--panel2); border: 1px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; cursor: pointer; transition: .15s; width: 100%; text-align: left;
+}
+.qa-btn:hover { border-color: var(--green); background: rgba(34,197,94,.05); }
+.qa-btn .qa-icon { font-size: 20px; margin-bottom: 4px; }
+.qa-btn .qa-title { font-size: 12.5px; font-weight: 700; color: var(--green); }
+.qa-btn .qa-sub { font-size: 10.5px; color: var(--muted); }
+
+/* STATS */
+.stat-num { font-size: 28px; font-weight: 800; font-family: var(--mono); color: var(--green); }
+.stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.progress-ring { display: inline-block; }
+
+/* FORM MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+  padding: 20px; width: 90%; max-width: 560px; max-height: 90vh; overflow-y: auto;
+  transform: translateY(20px); transition: transform .2s;
+}
+.modal-overlay.show .modal { transform: translateY(0); }
+.modal-title { font-size: 15px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.modal-close { cursor: pointer; color: var(--muted); font-size: 18px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group.span-2 { grid-column: span 2; }
+.form-label { font-size: 10px; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+.form-input, .form-select, .form-textarea {
+  background: var(--panel2); border: 1px solid var(--line); color: var(--text);
+  border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: var(--sans);
+  transition: border-color .15s; width: 100%;
+}
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--green); }
+.form-textarea { resize: vertical; min-height: 60px; }
+.form-select option { background: var(--panel); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s; border: none; font-family: var(--sans); }
+.btn-primary { background: var(--green); color: #fff; }
+.btn-primary:hover { background: var(--green2); }
+.btn-ghost { background: var(--panel2); border: 1px solid var(--line); color: var(--muted); }
+.btn-red { background: rgba(239,68,68,.15); border: 1px solid var(--red); color: var(--red); }
 
 /* TOAST */
-.toast{position:fixed;bottom:22px;right:22px;background:var(--text);color:var(--bg2);border-radius:var(--rl);padding:12px 16px;display:flex;align-items:center;gap:9px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.15);transform:translateY(70px);opacity:0;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);z-index:9999;max-width:310px;}
-.toast.show{transform:translateY(0);opacity:1;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.anim{animation:fadeUp 0.3s ease forwards;}
+.toast {
+  position: fixed; bottom: 20px; right: 20px; background: var(--panel);
+  border: 1px solid var(--green); color: var(--green); padding: 10px 16px;
+  border-radius: 10px; font-size: 13px; font-weight: 600; z-index: 300;
+  transform: translateY(60px); transition: transform .3s; box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+.toast.show { transform: translateY(0); }
+.toast.error { border-color: var(--red); color: var(--red); }
 
-.sec-divider{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;padding:14px 0 8px;display:flex;align-items:center;gap:8px;}
-.sec-divider::after{content:'';flex:1;height:1px;background:var(--line);}
+/* LOADING */
+.spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--green); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-state { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 30px; color: var(--muted); font-size: 13px; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* STATS PAGE */
+.stats-card { text-align: center; }
+.equity-chart { width: 100%; height: 160px; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-grid .span-2 { grid-column: span 1; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  .hamburger { display: flex !important; }
+}
+.hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; font-size: 16px; }
 </style>
 </head>
 <body>
 
-<!-- ═══════ SIDEBAR ═══════ -->
-<aside class="sidebar">
-  <div class="logo-wrap">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-    </div>
-    <div>
-      <div class="logo-title">Inspeksi<span>Tools</span></div>
-      <div class="logo-sub">v1.0 · Div AM System</div>
-    </div>
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">📊</div>
+    <div class="logo-name">AGS</div>
+    <div class="logo-sub">Analysis & Growth System</div>
   </div>
-  <nav class="nav">
-    <div class="nav-group-label">Utama</div>
-    <div class="nav-item active" onclick="goNav('dashboard',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
-    </div>
-    <div class="nav-item" onclick="goNav('form',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
-      Form Inspeksi
-    </div>
-    <div class="nav-item" onclick="goNav('waiting',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      Waiting Inspection
-      <span class="nav-pill">30</span>
-    </div>
-    <div class="nav-item" onclick="goNav('list',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Riwayat
-      <span class="nav-pill">12</span>
-    </div>
-    <div class="nav-item" onclick="goNav('overdue',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      Overdue
-      <span class="nav-pill red">12</span>
-    </div>
-    <div class="nav-group-label" style="margin-top:6px">Manajemen</div>
-    <div class="nav-item" onclick="showToast('Fitur Temuan segera hadir 🚧')">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      Temuan
-    </div>
-    <div class="nav-item" onclick="showToast('Fitur Laporan segera hadir 📄')">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Laporan
-    </div>
-    <div class="nav-group-label" style="margin-top:6px">Informasi</div>
-    <div class="nav-item" onclick="goNav('piclist',this)">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      List PIC Area
-    </div>
-    <div class="nav-item" onclick="showToast('Fitur Pengaturan segera hadir ⚙️')">
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-      Pengaturan
-    </div>
+  <nav class="sidebar-nav">
+    <div class="nav-item active" data-page="dashboard"><span class="nav-icon">🏠</span> Dashboard</div>
+    <div class="nav-item" data-page="gold"><span class="nav-icon">🥇</span> Gold</div>
+    <div class="nav-item" data-page="saham"><span class="nav-icon">📈</span> Saham</div>
+    <div class="nav-item" data-page="journal"><span class="nav-icon">📋</span> Trading Journal</div>
+    <div class="nav-item" data-page="statistics"><span class="nav-icon">🥧</span> Statistics</div>
+    <div class="nav-item" data-page="about"><span class="nav-icon">ℹ️</span> About</div>
   </nav>
-  <div class="sidebar-footer">
-    <div class="user-row">
-      <div class="ava">HS</div>
-      <div>
-        <div class="user-name">Hendra Suprianoor</div>
-        <div class="user-role">Inspektor</div>
+  <div class="sidebar-bottom">
+    <div class="discipline-box">
+      <div class="disc-label">Discipline Today</div>
+      <div class="disc-ring">
+        <svg width="72" height="72" viewBox="0 0 72 72">
+          <circle cx="36" cy="36" r="30" fill="none" stroke="var(--line)" stroke-width="6"/>
+          <circle cx="36" cy="36" r="30" fill="none" stroke="var(--green)" stroke-width="6"
+            stroke-dasharray="188.5" id="discArc" stroke-dashoffset="188.5" stroke-linecap="round"/>
+        </svg>
+        <span class="disc-num" id="discNum">—</span>
       </div>
+      <div class="disc-msg" id="discMsg">Loading...</div>
     </div>
+    <button class="theme-btn" id="themeBtn">🌙 <span id="themeLabel">Dark</span></button>
   </div>
 </aside>
 
-<!-- ═══════ MAIN ═══════ -->
+<!-- MAIN -->
 <div class="main">
   <header class="topbar">
-    <div class="page-breadcrumb" id="page-title">Dashboard</div>
-    <span class="topbar-mono" id="today-lbl"></span>
-    <button class="tb-btn" onclick="goNav('list',null)">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Riwayat
-    </button>
-    <button class="tb-btn primary" onclick="goNav('form',null)">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Inspeksi Baru
-    </button>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="hamburger" id="hamburger">☰</div>
+      <div class="topbar-left">
+        <div class="greeting" id="greeting">Good Morning, Azis 👋</div>
+        <div class="sub">Focus, Plan, Execute, Review, Improve.</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-time" id="liveTime">--:--:--</div>
+      <div id="liveDate">--</div>
+    </div>
   </header>
 
-  <div class="views">
+  <div class="content">
 
-    <!-- ════ DASHBOARD ════ -->
-    <div class="view on" id="v-dashboard">
-      <div class="kpi-grid anim">
-        <div class="kpi" style="cursor:pointer" onclick="goNav('list',null)"><div class="kpi-accent" style="background:var(--accent)"></div><div class="kpi-label">Total Inspeksi</div><div class="kpi-num" style="color:var(--accent)">48</div><div class="kpi-desc">Bulan Juni 2026</div></div>
-        <div class="kpi" style="cursor:pointer" onclick="goNav('list',null)"><div class="kpi-accent" style="background:var(--green)"></div><div class="kpi-label">Lulus</div><div class="kpi-num" style="color:var(--green)">35</div><div class="kpi-desc">72.9% pass rate</div></div>
-        <div class="kpi" style="cursor:pointer" onclick="goNav('waiting',null)"><div class="kpi-accent" style="background:var(--yellow)"></div><div class="kpi-label">Waiting Inspeksi</div><div class="kpi-num" style="color:var(--yellow)">30</div><div class="kpi-desc">Perlu segera inspeksi</div></div>
-        <div class="kpi" style="cursor:pointer" onclick="goNav('overdue',null)"><div class="kpi-accent" style="background:var(--red)"></div><div class="kpi-label">Overdue</div><div class="kpi-num" style="color:var(--red)">4</div><div class="kpi-desc">Perlu korektif segera</div></div>
-        <div class="kpi" style="cursor:pointer" onclick="showToast('Lihat detail temuan 🔍')"><div class="kpi-accent" style="background:var(--orange)"></div><div class="kpi-label">Temuan</div><div class="kpi-num" style="color:var(--orange)">9</div><div class="kpi-desc">Perlu tindak lanjut</div></div>
-      </div>
-      <div class="dash-grid">
+    <!-- ===== DASHBOARD PAGE ===== -->
+    <div class="page active" id="page-dashboard">
+
+      <!-- ===== TOP ROW ===== -->
+      <div class="dash-top">
+
+        <!-- LEFT COL: MISSION + MARKET OVERVIEW -->
+        <div class="dash-left-col">
+          <div class="card">
+            <div class="card-title">🎯 Today's Mission</div>
+            <div id="missionList"><div class="loading-state"><span class="spinner"></span> Loading...</div></div>
+            <div class="mission-quote" id="missionQuote">Disiplin adalah kunci konsistensi.</div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📊 Market Overview</div>
+            <div class="mkt-mini-grid" id="marketCards">
+              <div class="mkt-mini">
+                <div class="mkt-mini-icon">🥇</div>
+                <div class="mkt-mini-body">
+                  <div class="mkt-mini-label">XAU/USD</div>
+                  <div class="mkt-mini-sub">Gold Spot</div>
+                  <div class="mkt-mini-price" id="mkt-gold-price">—</div>
+                  <div class="mkt-mini-chg" id="mkt-gold-chg">—</div>
+                  <div class="mkt-mini-range"><span id="mkt-gold-high">High —</span><span id="mkt-gold-low">Low —</span></div>
+                </div>
+                <canvas class="mkt-mini-spark" id="spark-gold"></canvas>
+              </div>
+              <div class="mkt-mini">
+                <div class="mkt-mini-icon">💵</div>
+                <div class="mkt-mini-body">
+                  <div class="mkt-mini-label">USD/IDR</div>
+                  <div class="mkt-mini-sub">US Dollar / Rupiah</div>
+                  <div class="mkt-mini-price" id="mkt-usd-price">—</div>
+                  <div class="mkt-mini-chg" id="mkt-usd-chg">—</div>
+                  <div class="mkt-mini-range"><span id="mkt-usd-high">High —</span><span id="mkt-usd-low">Low —</span></div>
+                </div>
+                <canvas class="mkt-mini-spark" id="spark-usd"></canvas>
+              </div>
+              <div class="mkt-mini">
+                <div class="mkt-mini-icon">💰</div>
+                <div class="mkt-mini-body">
+                  <div class="mkt-mini-label">EMAS (IDR)</div>
+                  <div class="mkt-mini-sub">Harga emas per gram, estimasi</div>
+                  <div class="mkt-mini-price" id="mkt-goldidr-price">—</div>
+                  <div class="mkt-mini-chg" id="mkt-goldidr-chg">—</div>
+                  <div class="mkt-mini-range"><span id="mkt-goldidr-high">High —</span><span id="mkt-goldidr-low">Low —</span></div>
+                </div>
+                <canvas class="mkt-mini-spark" id="spark-goldidr"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GLOBAL MARKET NEWS (NewsData.io) -->
         <div class="card">
-          <div class="card-head"><span class="card-title">Inspeksi Terbaru</span><span class="card-link" onclick="goNav('list',null)">Lihat semua →</span></div>
-          <table class="tbl">
-            <thead><tr><th>No.</th><th>Lokasi</th><th>Jenis Alat</th><th>Status</th><th>Tanggal</th></tr></thead>
-            <tbody>
-              <tr><td class="em">INS-048</td><td>WS CIA · KGB</td><td>APAR</td><td><span class="badge bg-green"><span class="bdot" style="background:var(--green)"></span>Lulus</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">07/06/26</td></tr>
-              <tr><td class="em">INS-047</td><td>Iglo HE · GRB</td><td>Crane Workshop</td><td><span class="badge bg-yellow"><span class="bdot" style="background:var(--yellow)"></span>Perhatian</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">06/06/26</td></tr>
-              <tr><td class="em">INS-046</td><td>Bay CP · KGB</td><td>Full Body Harness</td><td><span class="badge bg-red"><span class="bdot" style="background:var(--red)"></span>Gagal</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">05/06/26</td></tr>
-              <tr><td class="em">INS-045</td><td>PCR · KGB</td><td>Sling / Webbing</td><td><span class="badge bg-green"><span class="bdot" style="background:var(--green)"></span>Lulus</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">04/06/26</td></tr>
-              <tr><td class="em">INS-044</td><td>SSB · GRB</td><td>Tangga Portable</td><td><span class="badge bg-blue"><span class="bdot" style="background:var(--accent)"></span>Draft</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">03/06/26</td></tr>
-            </tbody>
-          </table>
+          <div class="card-title-row">
+            <div class="card-title" style="margin-bottom:0;">🌐 Global Market News</div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="fetchGlobalNews()">Refresh</button>
+          </div>
+          <div class="card-source-sub">Sumber: Reuters, Bloomberg, CNBC, WSJ, MarketWatch, Nikkei Asia, SCMP, CNA (live via NewsData.io)</div>
+          <div id="globalNews" class="news-card-list"><div class="loading-state"><span class="spinner"></span> Loading...</div></div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:12px">
-          <div class="card">
-            <div class="card-head"><span class="card-title">Progress Bulan Ini</span></div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">Lulus</span><span style="color:var(--green);font-family:var(--mono);font-weight:600">35 / 48</span></div><div class="progbar"><div class="progfill" style="width:73%;background:var(--green)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">Perhatian</span><span style="color:var(--yellow);font-family:var(--mono);font-weight:600">9 / 48</span></div><div class="progbar"><div class="progfill" style="width:19%;background:var(--yellow)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--text2)">Gagal</span><span style="color:var(--red);font-family:var(--mono);font-weight:600">4 / 48</span></div><div class="progbar"><div class="progfill" style="width:8%;background:var(--red)"></div></div></div>
-            </div>
+
+        <!-- BERITA INDONESIA (Bloomberg Technoz) -->
+        <div class="card">
+          <div class="card-title-row">
+            <div class="card-title" style="margin-bottom:0;">🇮🇩 Berita Indonesia (Bloomberg Technoz)</div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="fetchIndonesiaNews()">Refresh</button>
           </div>
-          <div class="card">
-            <div class="card-head"><span class="card-title">Aktivitas Terkini</span></div>
-            <div class="act-item"><div class="act-dot-c" style="background:var(--green)"></div><div><div class="act-text">INS-048 disubmit</div><div class="act-time">Hari ini · 09:14</div></div></div>
-            <div class="act-item"><div class="act-dot-c" style="background:var(--yellow)"></div><div><div class="act-text">Temuan Crane — Iglo HE</div><div class="act-time">Kemarin · 15:30</div></div></div>
-            <div class="act-item"><div class="act-dot-c" style="background:var(--red)"></div><div><div class="act-text">INS-046 FBH — Gagal</div><div class="act-time">05 Jun · 11:00</div></div></div>
-            <div class="act-item"><div class="act-dot-c" style="background:var(--accent)"></div><div><div class="act-text">Draft INS-044 disimpan</div><div class="act-time">03 Jun · 16:45</div></div></div>
-          </div>
+          <div class="card-source-sub">Sumber: Bloomberg Technoz (live, ambil langsung dari web)</div>
+          <div id="indoNews" class="news-card-list"><div class="loading-state"><span class="spinner"></span> Loading...</div></div>
         </div>
       </div>
+
+      <!-- ===== BOTTOM ROW ===== -->
+      <div class="dash-bottom">
+
+        <!-- MARKET NEWS COMBINED -->
+        <div class="card">
+          <div class="card-title-row">
+            <div class="card-title" style="margin-bottom:0;">📰 Market News (Combined)</div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="fetchCombinedNews()">Refresh</button>
+          </div>
+          <div class="card-source-sub">Sumber: CNBC Indonesia, Detik Finance, CNN Indonesia (live, ambil langsung dari web)</div>
+          <div class="news-tabs" id="newsTabs">
+            <span class="news-tab active" data-cat="" onclick="filterCombinedNews('',this)">Semua</span>
+            <span class="news-tab" data-cat="gold" onclick="filterCombinedNews('gold',this)">Gold</span>
+            <span class="news-tab" data-cat="forex" onclick="filterCombinedNews('forex',this)">Forex</span>
+            <span class="news-tab" data-cat="economy" onclick="filterCombinedNews('economy',this)">Economy</span>
+            <span class="news-tab" data-cat="commodities" onclick="filterCombinedNews('commodities',this)">Commodities</span>
+            <span class="news-tab" data-cat="stock" onclick="filterCombinedNews('stock',this)">Stock</span>
+          </div>
+          <div id="combinedNews" class="news-card-list"><div class="loading-state"><span class="spinner"></span> Loading...</div></div>
+        </div>
+
+        <!-- MARKET IMPACT -->
+        <div class="card">
+          <div class="card-title-row">
+            <div class="card-title" style="margin-bottom:0;">⚡ Market Impact</div>
+            <span style="font-size:11px;color:var(--muted);cursor:help;" title="Bias dihitung otomatis dari pergerakan harga real-time">ⓘ</span>
+          </div>
+          <div id="marketImpact" style="margin-top:8px;"><div class="loading-state"><span class="spinner"></span> Loading...</div></div>
+        </div>
+
+        <!-- RECENT JOURNAL -->
+        <div class="card">
+          <div class="card-title-row">
+            <div class="card-title" style="margin-bottom:0;">📋 Recent Journal</div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="switchPage('journal')">Lihat Semua</button>
+          </div>
+          <div id="recentJournal" style="margin-top:8px;"><div class="loading-state"><span class="spinner"></span></div></div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- ════ WAITING INSPECTION ════ -->
-    <div class="view" id="v-waiting">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div>
-          <div style="font-size:18px;font-weight:700">Waiting Inspection</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:2px">Alat yang belum / jadwal akan diinspeksi</div>
+    <!-- ===== JOURNAL PAGE ===== -->
+    <div class="page" id="page-journal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:16px;font-weight:800;">📋 Trading Journal</div>
+        <button class="btn btn-primary" onclick="openModal('journal')">+ New Entry</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="card mb-14" style="padding:10px 14px;">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <select class="form-select" style="width:auto;" id="filterMarket">
+            <option value="">All Market</option>
+            <option>XAUUSD</option>
+            <option>Saham</option>
+          </select>
+          <select class="form-select" style="width:auto;" id="filterResult">
+            <option value="">All Result</option>
+            <option>Win</option><option>Loss</option><option>Break Even</option><option>Open</option>
+          </select>
+          <input type="date" class="form-input" style="width:auto;" id="filterDate">
+          <button class="btn btn-ghost" onclick="applyFilter()">Filter</button>
+          <button class="btn btn-ghost" onclick="clearFilter()">Clear</button>
         </div>
-        <button class="tb-btn primary" onclick="goNav('form',null)">+ Inspeksi Baru</button>
       </div>
-      <div class="filter-bar">
-        <input class="search-inp" placeholder="🔍 Cari asset, lokasi, jenis alat…" oninput="filterWaiting(this.value)"/>
-        <select class="flt-sel" onchange="filterWaiting()">
-          <option>Semua Area</option><option>KGB</option><option>GRB</option>
-        </select>
-        <select class="flt-sel">
-          <option>Semua Prioritas</option><option>Segera</option><option>Normal</option>
-        </select>
-      </div>
+
       <div class="card">
-        <table class="tbl" id="waiting-tbl">
-          <thead><tr><th>No. Asset</th><th>Lokasi</th><th>Jenis Alat</th><th>Jadwal</th><th>Terakhir Inspeksi</th><th>Status</th><th></th></tr></thead>
-          <tbody id="waiting-body"></tbody>
-        </table>
+        <div id="journalTable"><div class="loading-state"><span class="spinner"></span> Loading journal...</div></div>
       </div>
     </div>
 
-    <!-- ════ OVERDUE ════ -->
-    <div class="view" id="v-overdue">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div>
-          <div style="font-size:18px;font-weight:700;color:var(--red)">⚠ Overdue</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:2px">Item yang melewati jadwal inspeksi atau tindakan korektif</div>
+    <!-- ===== GOLD PAGE — load AZIS GOLD SYSTEM v1.0 (gold.html) tanpa diubah ===== -->
+    <div class="page" id="page-gold" style="padding:0;">
+      <iframe src="gold.html" title="AZIS GOLD SYSTEM"
+        style="border:none; width:100%; min-height:calc(100vh - 90px); display:block; background:#0b0f17;"></iframe>
+    </div>
+
+    <!-- ===== SAHAM PAGE — load AGS SAHAM DASHBOARD (saham.html) ===== -->
+    <div class="page" id="page-saham" style="padding:0;">
+      <iframe src="saham.html" title="AGS SAHAM DASHBOARD" id="sahamFrame"
+        style="border:none; width:100%; min-height:calc(100vh - 90px); display:block; background:#0a0f0a;"></iframe>
+    </div>
+
+    <!-- ===== STATISTICS PAGE ===== -->
+    <div class="page" id="page-statistics">
+      <div style="font-size:16px;font-weight:800;margin-bottom:14px;">🥧 Statistics</div>
+      <div id="statsContent"><div class="loading-state"><span class="spinner"></span> Calculating...</div></div>
+    </div>
+
+    <!-- ===== ABOUT PAGE ===== -->
+    <div class="page" id="page-about">
+      <div style="font-size:16px;font-weight:800;margin-bottom:14px;">ℹ️ About AGS</div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">✅ Entry Rules (Buy)</div>
+          <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> Trend Bullish (H1+H4)</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> Price Retrace to Bullish OB</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> FVG Filled</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> Liquidity Sweep (EQ Low)</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> RSI Rebound Above 40</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> Volume Increasing</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> No High Impact News</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--green)">✔</span> Min R:R 1:2</div>
+          </div>
         </div>
-        <span class="badge bg-red" style="font-size:13px;padding:5px 14px">12 Item Overdue</span>
-      </div>
-      <div class="filter-bar">
-        <input class="search-inp" placeholder="🔍 Cari asset, lokasi…" oninput="filterOverdue(this.value)"/>
-        <select class="flt-sel"><option>Semua Tipe</option><option>Inspeksi Terlambat</option><option>Korektif Belum Selesai</option></select>
-      </div>
-      <div class="card">
-        <table class="tbl">
-          <thead><tr><th>No. Asset</th><th>Lokasi</th><th>Jenis Alat</th><th>Tipe Overdue</th><th>Hari Terlambat</th><th>PIC</th><th></th></tr></thead>
-          <tbody id="overdue-body"></tbody>
-        </table>
+        <div class="card">
+          <div class="card-title" style="color:var(--red);">🔻 Entry Rules (Sell)</div>
+          <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> Trend Bearish (H1+H4)</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> Price Retrace to Bearish OB</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> FVG Filled</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> Liquidity Sweep (EQ High)</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> RSI Rejection Below 60</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> Volume Increasing</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> No High Impact News</div>
+            <div style="display:flex;gap:8px;align-items:center;"><span style="color:var(--red)">✔</span> Min R:R 1:2</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">📖 How To Use</div>
+          <div style="font-size:13px;display:flex;flex-direction:column;gap:7px;counter-reset:steps;">
+            <div>1. Check Trend &amp; AI Score</div>
+            <div>2. Wait for Price Retrace to OB</div>
+            <div>3. Wait for Liquidity Sweep</div>
+            <div>4. Confirm with FVG + RSI + Volume</div>
+            <div>5. Set SL &amp; TP with Risk Calculator</div>
+            <div>6. Execute with Discipline</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- ════ RIWAYAT ════ -->
-    <div class="view" id="v-list">
-      <div class="filter-bar">
-        <input class="search-inp" placeholder="🔍 Cari nomor, lokasi, jenis alat…" oninput="filterList(this.value)"/>
-        <select class="flt-sel"><option>Semua Status</option><option>Lulus</option><option>Perhatian</option><option>Gagal</option><option>Draft</option></select>
-        <select class="flt-sel"><option>Semua Bulan</option><option>Juni 2026</option><option>Mei 2026</option><option>April 2026</option></select>
-        <button class="tb-btn primary" onclick="goNav('form',null)">+ Baru</button>
-      </div>
-      <div class="card">
-        <table class="tbl">
-          <thead><tr><th>No. Inspeksi</th><th>Lokasi</th><th>Jenis Alat</th><th>No. Asset</th><th>Status</th><th>Tanggal</th><th></th></tr></thead>
-          <tbody id="list-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ════ LIST PIC AREA ════ -->
-    <div class="view" id="v-piclist">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div>
-          <div style="font-size:18px;font-weight:700">List PIC Area</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:2px">Penanggung jawab per area — KGB & GRB</div>
-        </div>
-        <button class="tb-btn" onclick="showToast('Fitur tambah PIC segera hadir 🚧')">+ Tambah PIC</button>
-      </div>
-      <div class="sec-divider">KGB — Kalimantan Group B</div>
-      <div class="pic-grid" id="pic-grid-kgb"></div>
-      <div class="sec-divider" style="margin-top:16px">GRB — Group B Replacement</div>
-      <div class="pic-grid" id="pic-grid-grb"></div>
-    </div>
-
-    <!-- ════ FORM INSPEKSI ALAT ════ -->
-    <div class="view" id="v-form">
-      <div class="form-step-header">
-        <div class="fsh-item"><div class="fsh-dot active" id="sd0">1</div><div class="fsh-lbl active" id="sl0">Info & Tools</div></div>
-        <div class="fsh-line" id="sline0"></div>
-        <div class="fsh-item"><div class="fsh-dot" id="sd1">2</div><div class="fsh-lbl" id="sl1">Checklist</div></div>
-        <div class="fsh-line" id="sline1"></div>
-        <div class="fsh-item"><div class="fsh-dot" id="sd2">3</div><div class="fsh-lbl" id="sl2">Temuan</div></div>
-        <span class="fid-badge" id="fid-badge">-</span>
-      </div>
-
-      <!-- STEP 0 -->
-      <div id="fstep-0">
-        <div class="form-wrap">
-          <div class="form-col">
-            <div class="fsec anim">
-              <div class="fsec-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Informasi Umum</div>
-              <div class="field"><label class="lbl">Tanggal Inspeksi <span class="req">*</span></label><input type="date" id="f-tanggal" required></div>
-              <div class="r2">
-                <div class="field"><label class="lbl">Nama Inspektor <span class="req">*</span></label><input type="text" id="f-nama" placeholder="Nama lengkap..." required></div>
-                <div class="field"><label class="lbl">SN Inspektor <span class="req">*</span></label><input type="text" id="f-sn" placeholder="SN-XXXX" required></div>
-              </div>
-              <div class="r2">
-                <div class="field"><label class="lbl">Pit Area <span class="req">*</span></label><select id="f-pit" required onchange="updateArea()"><option value="">- Pilih -</option><option value="KGB">KGB</option><option value="GRB">GRB</option></select></div>
-                <div class="field"><label class="lbl">Sub Area <span class="req">*</span></label>
-                  <div class="ios-wrap"><select id="f-sub" required><option value="">- Pilih Area dulu -</option></select><input type="text" id="f-sub-manual" placeholder="Ketik sub area..." style="display:none;"><button type="button" class="manual-toggle" id="sub-toggle" onclick="toggleSubManual()">+ Input manual</button></div>
-                </div>
-              </div>
-              <div class="r2">
-                <div class="field"><label class="lbl">No. Asset <span class="req">*</span></label><input type="text" id="f-asset" placeholder="TNG-001" required></div>
-                <div class="field"><label class="lbl">No. Register</label><input type="text" id="f-reg" placeholder="REG-XXX"></div>
-              </div>
-              <div class="field"><label class="lbl">PIC Area <span class="req">*</span></label>
-                <div class="ios-wrap"><select id="f-pic" required><option value="">- Pilih Area dulu -</option></select><input type="text" id="f-pic-manual" placeholder="Ketik nama PIC..." style="display:none;"><button type="button" class="manual-toggle" id="pic-toggle" onclick="togglePicManual()">+ Input manual</button></div>
-              </div>
-            </div>
-            <div class="fsec">
-              <div class="fsec-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Pilih Jenis Tools <span style="color:var(--red);margin-left:2px">*</span></div>
-              <div class="tools-grid">
-                <div class="tool-cat">1. Tool Room</div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_ta" value="tenaga_angin"><label for="t_ta">🔧 Tenaga Angin</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_al" value="alat_listrik"><label for="t_al">⚡ Alat Listrik Portable</label></div>
-                <div class="tool-cat">2. Lifting & Penyangga</div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_hs" value="hook_shackle"><label for="t_hs">🪝 Hook & Shackle</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_sl" value="sling"><label for="t_sl">🔗 Sling / Webbing</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_rp" value="rantai"><label for="t_rp">⛓ Rantai Pengangkat</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_cr" value="crane"><label for="t_cr">🏗 Crane Workshop</label></div>
-                <div class="tool-cat">3. Fasilitas Penunjang</div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_tp" value="tangga_permanen"><label for="t_tp">🪜 Tangga Permanen</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_tpo" value="tangga_portable"><label for="t_tpo">🪜 Tangga Portable</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_ot" value="oil_trap"><label for="t_ot">🛢 Oil Trap / Washpad</label></div>
-                <div class="tool-cat">4. Sarana K3</div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_ew" value="eyewash"><label for="t_ew">👁 Eyewash</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_fbh" value="fbh"><label for="t_fbh">🦺 Full Body Harness</label></div>
-                <div class="tool-opt"><input type="radio" name="jenisTool" id="t_ap" value="apar"><label for="t_ap">🧯 APAR</label></div>
-              </div>
-            </div>
-            <div class="fnav"><button class="btn btn-primary" style="flex:1" onclick="fsNext()">Lanjut ke Checklist <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><polyline points="9 18 15 12 9 6"/></svg></button></div>
-          </div>
-          <div class="form-aside">
-            <div class="card">
-              <div class="card-title" style="margin-bottom:10px">Panduan</div>
-              <div style="font-size:12.5px;color:var(--text2);line-height:1.75">
-                <div style="margin-bottom:7px">📋 <b>Step 1</b> — Isi info umum & pilih jenis tools</div>
-                <div style="margin-bottom:7px">✅ <b>Step 2</b> — Jawab checklist Ya / Tidak / N/A</div>
-                <div>🚨 <b>Step 3</b> — Isi temuan jika ada item Tidak (wajib foto)</div>
-              </div>
-              <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">
-                <div style="font-size:10.5px;color:var(--text3);margin-bottom:3px">FORM ID</div>
-                <div style="font-family:var(--mono);font-size:12.5px;color:var(--accent);font-weight:600" id="form-id-aside">-</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 1 -->
-      <div id="fstep-1" style="display:none">
-        <div class="form-wrap">
-          <div class="form-col">
-            <div class="ng-alert" id="ng-alert">⚠️ Ada item <b>Tidak</b> — lengkapi detail temuan di step berikutnya.</div>
-            <div class="fsec" id="cl-container"></div>
-            <div class="fnav">
-              <button class="btn" style="padding:9px 14px" onclick="fsPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><polyline points="15 18 9 12 15 6"/></svg> Kembali</button>
-              <button class="btn btn-primary" style="flex:1" id="btn-cl-next" onclick="fsNext()">Lanjut ke Temuan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><polyline points="9 18 15 12 9 6"/></svg></button>
-            </div>
-          </div>
-          <div class="form-aside">
-            <div class="card" style="margin-bottom:12px">
-              <div class="card-title" style="margin-bottom:10px">Progres Checklist</div>
-              <div class="prog-ring-wrap"><div class="prog-big" id="cl-pct">0%</div><div class="prog-lbl">item dijawab</div></div>
-              <div class="progbar" style="margin-bottom:12px"><div class="progfill" id="cl-fill" style="width:0%;background:var(--accent)"></div></div>
-              <div class="stat-mini-grid">
-                <div class="stat-mini"><div class="stat-mini-val" id="cl-ya" style="color:var(--green)">0</div><div class="stat-mini-lbl">✓ Ya</div></div>
-                <div class="stat-mini"><div class="stat-mini-val" id="cl-tdk" style="color:var(--red)">0</div><div class="stat-mini-lbl">✗ Tidak</div></div>
-                <div class="stat-mini"><div class="stat-mini-val" id="cl-na" style="color:var(--text2)">0</div><div class="stat-mini-lbl">— N/A</div></div>
-                <div class="stat-mini"><div class="stat-mini-val" id="cl-blm" style="color:var(--text3)">0</div><div class="stat-mini-lbl">? Belum</div></div>
-              </div>
-            </div>
-            <div class="card">
-              <div style="font-size:11px;color:var(--text3);margin-bottom:3px">TOOLS</div>
-              <div style="font-size:13px;color:var(--accent);font-weight:600" id="aside-tool-lbl">-</div>
-              <div style="font-size:11.5px;color:var(--text3);margin-top:3px" id="aside-asset-lbl">-</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div id="fstep-2" style="display:none">
-        <div class="form-wrap">
-          <div class="form-col">
-            <div class="fsec anim">
-              <div class="fsec-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Detail Temuan</div>
-              <div class="field"><label class="lbl">Tingkat Risiko <span class="req">*</span></label>
-                <div class="risiko-grid">
-                  <div class="risiko-opt"><input type="radio" name="risiko" id="r-low" value="Low"><label for="r-low"><span class="ri-lv">LOW</span>Risiko Rendah<span class="ri-sub">Selesaikan 30 hari</span></label></div>
-                  <div class="risiko-opt"><input type="radio" name="risiko" id="r-med" value="Medium"><label for="r-med"><span class="ri-lv">MED</span>Medium<span class="ri-sub">Selesaikan 7 hari</span></label></div>
-                  <div class="risiko-opt"><input type="radio" name="risiko" id="r-hi" value="High"><label for="r-hi"><span class="ri-lv">HIGH</span>Risiko Tinggi<span class="ri-sub">Selesaikan 24 jam</span></label></div>
-                  <div class="risiko-opt"><input type="radio" name="risiko" id="r-crit" value="Critical"><label for="r-crit"><span class="ri-lv">CRIT</span>Critical<span class="ri-sub">Stop operasional!</span></label></div>
-                </div>
-              </div>
-              <div class="field"><label class="lbl">Deskripsi Temuan <span class="req">*</span></label><textarea id="t-desc" placeholder="Jelaskan temuan secara detail — lokasi, kondisi, estimasi risiko..."></textarea></div>
-              <div class="field"><label class="lbl">Rekomendasi Tindakan</label><textarea id="t-rek" placeholder="Perbaikan yang disarankan..." style="min-height:60px"></textarea></div>
-              <div class="field"><label class="lbl">Status Aset</label><select id="t-status"><option value="Dapat Digunakan">Dapat Digunakan</option><option value="Perlu Perbaikan Segera">Perlu Perbaikan Segera</option><option value="Tidak Boleh Digunakan">Tidak Boleh Digunakan (OOS)</option></select></div>
-              <div class="field"><label class="lbl">Foto Temuan <span class="req">*</span></label>
-                <div class="foto-zone"><input type="file" id="foto-input" accept="image/*" multiple onchange="handleFoto(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><p>Tap untuk ambil foto atau pilih dari galeri</p><span style="font-size:11px;color:var(--accent)">Min. 1 foto · maks 3 foto · JPG/PNG</span></div>
-                <div class="foto-preview" id="foto-preview"></div>
-                <div class="foto-status" id="foto-status"></div>
-              </div>
-              <div class="field"><label class="lbl">Catatan Tambahan</label><textarea id="t-catatan" placeholder="Catatan lain jika ada..."></textarea></div>
-            </div>
-            <div class="fnav">
-              <button class="btn" style="padding:9px 14px" onclick="fsPrev()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><polyline points="15 18 9 12 15 6"/></svg> Kembali</button>
-              <button class="btn btn-green" style="flex:1" id="btn-submit" onclick="doSubmitForm()">
-                <span class="sp" id="sp"></span>
-                <span id="btn-submit-txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;vertical-align:-2px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Kirim Laporan</span>
-              </button>
-            </div>
-          </div>
-          <div class="form-aside">
-            <div class="card">
-              <div class="card-title" style="margin-bottom:10px">Ringkasan Temuan</div>
-              <div style="font-size:12.5px;color:var(--text2);line-height:1.75">Item Tidak: <span id="sum-ng" style="color:var(--red);font-weight:600">-</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- /v-form -->
-
-  </div><!-- /views -->
+  </div><!-- /content -->
 </div><!-- /main -->
 
-<!-- OVERLAY -->
-<div class="ov" id="ov">
-  <div class="ov-card">
-    <div class="ov-icon" id="ov-i">✅</div>
-    <div class="ov-title ok" id="ov-t">Berhasil Dikirim!</div>
-    <div class="ov-msg" id="ov-m">Data tersimpan.</div>
-    <button class="btn btn-primary" onclick="resetFormFull()" style="width:100%">Isi Form Baru</button>
+<!-- ===== MODAL: NEW JOURNAL ===== -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">
+      <span id="modalTitle">New Journal Entry</span>
+      <span class="modal-close" onclick="closeModal()">✕</span>
+    </div>
+    <div class="form-grid" id="modalForm">
+      <div class="form-group">
+        <label class="form-label">Market</label>
+        <select class="form-select" id="f-market">
+          <option>XAUUSD</option><option>Saham</option><option>Crypto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Symbol</label>
+        <input class="form-input" id="f-symbol" placeholder="e.g. XAUUSD / BBCA">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Direction</label>
+        <select class="form-select" id="f-direction">
+          <option>Buy</option><option>Sell</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Timeframe</label>
+        <select class="form-select" id="f-timeframe">
+          <option>M15</option><option>M5</option><option>H1</option><option>H4</option><option>D1</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Entry</label>
+        <input class="form-input" id="f-entry" type="number" step="0.001">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stop Loss</label>
+        <input class="form-input" id="f-sl" type="number" step="0.001">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Take Profit</label>
+        <input class="form-input" id="f-tp" type="number" step="0.001">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Risk (%)</label>
+        <input class="form-input" id="f-risk" type="number" step="0.1" value="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">RR</label>
+        <input class="form-input" id="f-rr" type="number" step="0.1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Result</label>
+        <select class="form-select" id="f-result">
+          <option>Open</option><option>Win</option><option>Loss</option><option>Break Even</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">P/L (Point)</label>
+        <input class="form-input" id="f-pl" type="number">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Emotion</label>
+        <select class="form-select" id="f-emotion">
+          <option>Calm</option><option>Greedy</option><option>Fear</option><option>Confident</option><option>FOMO</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Strategy</label>
+        <input class="form-input" id="f-strategy" placeholder="e.g. OB + FVG">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confidence (%)</label>
+        <input class="form-input" id="f-conf" type="number" min="0" max="100" value="75">
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Lesson Learned</label>
+        <textarea class="form-textarea" id="f-lesson" placeholder="Apa yang dipelajari dari trade ini?"></textarea>
+      </div>
+      <div class="form-group span-2">
+        <label class="form-label">Notes</label>
+        <textarea class="form-textarea" id="f-notes" placeholder="Catatan tambahan..."></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="submitBtn" onclick="submitJournal()">💾 Save Entry</button>
+    </div>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast-el"><span id="toast-txt"></span></div>
+<div class="toast" id="toast"></div>
 
 <script>
-var SCRIPT_URL="https://script.google.com/macros/s/AKfycbwVn7wO19dYw0kAzd4G9cQeo4DafeCUkqDEYB3AvrNJayJ4qiMDsXAMQW7U9PU08i2OZw/exec";
+// ================================================================
+// CONFIG — ganti dengan URL Apps Script kamu setelah deploy Code.gs
+// Spreadsheet: 1_6SdqHmcglIr2qA6LQnkQgBls66wRjkkLiN2xSEoync
+// Lihat instruksi deploy di bagian atas file Code.gs
+// ================================================================
+const GAS_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+const TD_KEY  = '5f52a74cd9f24b49a4729b5b8e599505';
+const NEWSDATA_KEY = 'pub_47e6cda858f64a87b264b4a8aa6a031b';
 
-var SUB_AREAS={KGB:["WS CIA","Office CIA","PCR","Area TU","SSB","Bay CP","Epiroc","Pit Stop Selatan"],GRB:["Iglo HE","Iglo Track & Support Eq","Area TU","SSB","Bay CP","Epiroc","Pit Stop Selatan"]};
-var PIC_OPTIONS={
-  KGB:[{nama:"Budi Jatmiko",area:"WS CIA",email:"dimayy17@gmail.com"},{nama:"Rina Sari",area:"Office CIA",email:"drangga88@gmail.com"},{nama:"Abdul Aziz",area:"PCR",email:"Abdulaziz2037@gmail.com"},{nama:"Hendra P.",area:"Area TU",email:""},{nama:"Ahmad Rafi",area:"SSB",email:""},{nama:"Dedi Kurnia",area:"Bay CP",email:""},{nama:"Siti Rahayu",area:"Epiroc",email:""},{nama:"Irfan Maulana",area:"Pit Stop Selatan",email:""}],
-  GRB:[{nama:"Rizki Amri",area:"Iglo HE",email:""},{nama:"Fajar Nugroho",area:"Iglo Track",email:""},{nama:"Yudi Pratama",area:"Area TU",email:""},{nama:"Novi Andriani",area:"SSB",email:""},{nama:"Bayu Santoso",area:"Bay CP",email:""},{nama:"Toni Wijaya",area:"Epiroc",email:""},{nama:"Mega Wulandari",area:"Pit Stop Selatan",email:""}]
-};
+// cache untuk berita
+let newsCache = { global: [], indo: [], combined: [] };
 
-var WAITING_DATA=[
-  {asset:"APR-012",loc:"WS CIA · KGB",tool:"APAR",jadwal:"10/06/26",last:"10/03/26",priority:"Segera"},
-  {asset:"FBH-019",loc:"Iglo HE · GRB",tool:"Full Body Harness",jadwal:"08/06/26",last:"08/03/26",priority:"Segera"},
-  {asset:"CRN-003",loc:"Bay CP · KGB",tool:"Crane Workshop",jadwal:"15/06/26",last:"15/03/26",priority:"Normal"},
-  {asset:"SLG-008",loc:"PCR · KGB",tool:"Sling / Webbing",jadwal:"12/06/26",last:"12/03/26",priority:"Normal"},
-  {asset:"TGP-005",loc:"SSB · GRB",tool:"Tangga Portable",jadwal:"14/06/26",last:"14/03/26",priority:"Normal"},
-  {asset:"ALP-025",loc:"Office CIA · KGB",tool:"Alat Listrik Portable",jadwal:"09/06/26",last:"09/03/26",priority:"Segera"},
-  {asset:"HSK-011",loc:"Epiroc · GRB",tool:"Hook & Shackle",jadwal:"11/06/26",last:"11/03/26",priority:"Normal"},
-  {asset:"EYW-002",loc:"Area TU · KGB",tool:"Eyewash",jadwal:"20/06/26",last:"20/03/26",priority:"Normal"},
-  {asset:"OTW-004",loc:"Pit Stop · GRB",tool:"Oil Trap / Washpad",jadwal:"18/06/26",last:"18/03/26",priority:"Normal"},
-  {asset:"RNT-006",loc:"Bay CP · GRB",tool:"Rantai Pengangkat",jadwal:"07/06/26",last:"07/03/26",priority:"Segera"},
-];
+// ================================================================
+// STATE
+// ================================================================
+let journals = [];
+let dashData = {};
+let editingId = null;
 
-var OVERDUE_DATA=[
-  {asset:"APR-005",loc:"Iglo HE · GRB",tool:"APAR",tipe:"Inspeksi Terlambat",hari:15,pic:"Rizki Amri"},
-  {asset:"FBH-003",loc:"Bay CP · KGB",tool:"Full Body Harness",tipe:"Korektif Belum Selesai",hari:8,pic:"Dedi Kurnia"},
-  {asset:"CRN-001",loc:"WS CIA · KGB",tool:"Crane Workshop",tipe:"Inspeksi Terlambat",hari:22,pic:"Budi Jatmiko"},
-  {asset:"TAN-007",loc:"SSB · KGB",tool:"Tenaga Angin",tipe:"Inspeksi Terlambat",hari:5,pic:"Ahmad Rafi"},
-  {asset:"SLG-003",loc:"PCR · KGB",tool:"Sling / Webbing",tipe:"Korektif Belum Selesai",hari:12,pic:"Abdul Aziz"},
-  {asset:"TGP-002",loc:"Epiroc · GRB",tool:"Tangga Portable",tipe:"Inspeksi Terlambat",hari:18,pic:"Toni Wijaya"},
-  {asset:"RNT-001",loc:"Area TU · GRB",tool:"Rantai Pengangkat",tipe:"Korektif Belum Selesai",hari:30,pic:"Yudi Pratama"},
-  {asset:"HSK-004",loc:"Iglo Track · GRB",tool:"Hook & Shackle",tipe:"Inspeksi Terlambat",hari:7,pic:"Fajar Nugroho"},
-  {asset:"ALP-009",loc:"Office CIA · KGB",tool:"Alat Listrik Portable",tipe:"Korektif Belum Selesai",hari:3,pic:"Rina Sari"},
-  {asset:"EYW-001",loc:"Pit Stop · GRB",tool:"Eyewash",tipe:"Inspeksi Terlambat",hari:45,pic:"Mega Wulandari"},
-  {asset:"OTW-001",loc:"Bay CP · GRB",tool:"Oil Trap / Washpad",tipe:"Inspeksi Terlambat",hari:11,pic:"Bayu Santoso"},
-  {asset:"APR-009",loc:"Area TU · KGB",tool:"APAR",tipe:"Korektif Belum Selesai",hari:6,pic:"Hendra P."},
-];
-
-var LIST_DATA=[
-  {no:'INS-048',loc:'WS CIA · KGB',tool:'APAR',asset:'APR-048',status:'Lulus',date:'07/06/26'},
-  {no:'INS-047',loc:'Iglo HE · GRB',tool:'Crane Workshop',asset:'CRN-002',status:'Perhatian',date:'06/06/26'},
-  {no:'INS-046',loc:'Bay CP · KGB',tool:'Full Body Harness',asset:'FBH-017',status:'Gagal',date:'05/06/26'},
-  {no:'INS-045',loc:'PCR · KGB',tool:'Sling / Webbing',asset:'SLG-005',status:'Lulus',date:'04/06/26'},
-  {no:'INS-044',loc:'SSB · GRB',tool:'Tangga Portable',asset:'TGP-003',status:'Draft',date:'03/06/26'},
-  {no:'INS-043',loc:'WS CIA · KGB',tool:'Alat Listrik',asset:'ALP-021',status:'Lulus',date:'02/06/26'},
-  {no:'INS-042',loc:'Area TU · GRB',tool:'APAR',asset:'APR-009',status:'Lulus',date:'01/06/26'},
-  {no:'INS-041',loc:'Epiroc · KGB',tool:'Hook & Shackle',asset:'HSK-007',status:'Perhatian',date:'31/05/26'},
-  {no:'INS-040',loc:'Bay CP · GRB',tool:'Eyewash',asset:'EYW-001',status:'Lulus',date:'30/05/26'},
-  {no:'INS-039',loc:'SSB · KGB',tool:'Rantai Pengangkat',asset:'RNT-004',status:'Lulus',date:'29/05/26'},
-  {no:'INS-038',loc:'Iglo HE · GRB',tool:'Tenaga Angin',asset:'TAN-011',status:'Gagal',date:'28/05/26'},
-  {no:'INS-037',loc:'PCR · KGB',tool:'Oil Trap',asset:'OTW-002',status:'Lulus',date:'27/05/26'},
-];
-
-var CL={tenaga_angin:{label:"Tenaga Angin",kategori:"1. Tool Room",items:[{no:"1.1.1",q:"Nama peralatan portabel tercantum/teridentifikasi"},{no:"1.1.2",q:"Kabel listrik dalam keadaan baik (tidak rusak)"},{no:"1.1.3",q:"Tidak ada kerusakan secara fisik pada alat"},{no:"1.1.4",q:"Periksa air strainer pada alat (jika ada)"},{no:"1.1.5",q:"Katup kontrol (control valve) tertutup sebelum penyambungan"},{no:"1.1.6",q:"Pengaman terpasang dengan baik (jika ada)"},{no:"1.1.7",q:"Sambungan dalam keadaan baik"}]},alat_listrik:{label:"Alat Listrik Portable",kategori:"1. Tool Room",items:[{no:"1.3.1",q:"Kabel dan plug dalam kondisi baik"},{no:"1.3.2",q:"Karbon Brush / Brushguel dalam kondisi baik"},{no:"1.3.3",q:"Frame / Pelindung dalam kondisi baik"},{no:"1.3.4",q:"Switch / Tombol ON-OFF berfungsi"},{no:"1.3.5",q:"Semua sambungan kabel dalam kondisi baik"},{no:"1.3.6",q:"Kabel Grounding terpasang dan baik"},{no:"1.3.7",q:"Kondisi fisik alat baik"},{no:"1.3.8",q:"Peralatan tercantum dalam daftar peralatan"},{no:"1.3.9",q:"Peralatan memiliki No. Register"},{no:"1.3.10",q:"Tertera info tanggal tes / inspeksi terakhir"},{no:"1.3.11",q:"Polaritas sesuai"},{no:"1.3.12",q:"Kabel berisolasi ganda"},{no:"1.3.13",q:"Tidak ada kerusakan isolasi pada flexible supply cord"},{no:"1.3.14",q:"Kabel flexible sesuai anchored"},{no:"1.3.15",q:"Resistansi isolator dan konduktor tidak kurang dari 1.0 mega ohms"}]},hook_shackle:{label:"Hook & Shackle",kategori:"2. Lifting & Penyangga",subs:[{label:"Hook",items:[{no:"2.1.1",q:"Safety latch terpasang dan berfungsi"},{no:"2.1.2",q:"Tidak ada pelebaran pada bukaan hook"},{no:"2.1.3",q:"Bebas dari retak, goresan, atau aus berlebih"},{no:"2.1.4",q:"Tidak ada bengkok ke samping"},{no:"2.1.5",q:"Tidak ada keausan pada Eye, Clevis, Saddle, Load Pin"}]},{label:"Shackle",items:[{no:"2.1.6",q:"Kondisi umum shackle baik"},{no:"2.1.7",q:"Tidak ada keausan pada pin"},{no:"2.1.8",q:"Ulir dalam keadaan baik"},{no:"2.1.9",q:"Beban Kerja Aman (SWL) tercantum dan sesuai"}]}]},sling:{label:"Sling / Webbing",kategori:"2. Lifting & Penyangga",items:[{no:"2.2.1",q:"Seluruh panjang sling sudah diperiksa"},{no:"2.2.2",q:"Beban Kerja Aman (SWL) tercantum"},{no:"2.2.3",q:"Tidak ada keausan / kerusakan mekanik"},{no:"2.2.4",q:"Tidak ada serat putus / terpotong / terurai"},{no:"2.2.5",q:"Tidak ada tali/untaian yang berubah tempat"},{no:"2.2.6",q:"Tidak ada pemipihan pada untaian"},{no:"2.2.7",q:"Tidak ada perubahan warna tali (tanda panas/kimia)"},{no:"2.2.8",q:"Kondisi bagian dalam untaian baik"},{no:"2.2.9",q:"Tidak terpapar media korosif"},{no:"2.2.10",q:"Tidak terpapar panas berlebih / sinar matahari langsung"}]},rantai:{label:"Rantai Pengangkat",kategori:"2. Lifting & Penyangga",items:[{no:"2.3.1",q:"Semua sambungan sepanjang rantai sudah diperiksa"},{no:"2.3.2",q:"Beban Kerja Aman (SWL) ditunjukkan + nomor"},{no:"2.3.3",q:"Tidak ada keausan / abrasi / kerusakan mekanis"},{no:"2.3.4",q:"Tidak ada yang membelit / melar / bengkok"},{no:"2.3.5",q:"Tidak ada yang tertoreh / retak"},{no:"2.3.6",q:"Rantai 4 kaki, semua kaki sama panjang"},{no:"2.3.7",q:"Tidak ada keausan pada sambungan dan barrel samping"},{no:"2.3.8",q:"Tidak ada yang berubah bentuk (sambungan utama)"},{no:"2.3.9",q:"Tidak ada kerusakan pada sambungan coupling"},{no:"2.3.10",q:"Tidak ada kerusakan pada attachment"}]},crane:{label:"Crane Workshop",kategori:"2. Lifting & Penyangga",items:[{no:"2.4.1",q:"Tidak ada kerusakan pada struktur crane"},{no:"2.4.2",q:"Alat pengunci kabel pada drum wheel berfungsi"},{no:"2.4.3",q:"Beban maksimum tertera pada crane"},{no:"2.4.4",q:"Indikator beban aman berfungsi"},{no:"2.4.5",q:"Sistem rem pada beban berfungsi"},{no:"2.4.6",q:"Alat pembatas beban berfungsi"},{no:"2.4.7",q:"Sistem rem untuk berjalan berfungsi"},{no:"2.4.8",q:"Saklar alat pembatas berfungsi"},{no:"2.4.9",q:"Emergency switch berfungsi dengan baik"},{no:"2.4.10",q:"Tidak ada keausan berlebih pada puli"},{no:"2.4.11",q:"Tidak ada keausan berlebih pada drum"},{no:"2.4.12",q:"Tali pada drum minimal 3 lilitan penuh"},{no:"2.4.13",q:"Arah berjalan pada cross beam sesuai kontrol"},{no:"2.4.14",q:"Akses sekitar crane aman dan tidak terhalang"},{no:"2.4.15",q:"Pelumasan dalam kondisi baik"},{no:"2.4.16",q:"Alarm untuk bergerak berfungsi"},{no:"2.4.17",q:"Safety sign terpasang dan terbaca"},{no:"2.4.18",q:"Remote Control / Lockout pada kontrol berfungsi"},{no:"2.4.19",q:"Alat pembatas hoist (anti blocking) berfungsi"},{no:"2.4.20",q:"Hook pengangkat dalam kondisi baik"},{no:"2.4.21",q:"Tali pengangkat dalam kondisi baik"},{no:"2.4.22",q:"Tidak ada kerusakan pada rel crane"}]},tangga_permanen:{label:"Tangga Permanen",kategori:"3. Fasilitas Penunjang",items:[{no:"3.1.1",q:"Anak tangga dalam kondisi baik (tidak longgar)"},{no:"3.1.2",q:"Tangga bebas dari paku atau logam lain yang longgar"},{no:"3.1.3",q:"Tiang, penguat dan anak tangga tidak retak atau patah"},{no:"3.1.4",q:"Anak tangga tidak terhalang"},{no:"3.1.5",q:"Tangga stabil"},{no:"3.1.6",q:"Pegangan dan kerangka dalam kondisi baik"},{no:"3.1.7",q:"Kerangka dipasang dan dikunci"}]},tangga_portable:{label:"Tangga Portable",kategori:"3. Fasilitas Penunjang",items:[{no:"3.2.1",q:"Anak tangga dalam kondisi baik (tidak longgar)"},{no:"3.2.2",q:"Tangga tidak memiliki paku atau logam yang longgar"},{no:"3.2.3",q:"Tiang, penguat, atau anak tangga tidak retak"},{no:"3.2.4",q:"Tiang tangga atau anak tangga tidak licin"},{no:"3.2.5",q:"Engsel dalam kondisi baik"},{no:"3.2.6",q:"Tangga stabil (tidak goyang)"},{no:"3.2.7",q:"Extension sock/lock dalam kondisi baik"},{no:"3.2.8",q:"Tali dalam kondisi baik (jika ada)"},{no:"3.2.9",q:"Tangga bebas dari label yang menutup cacat"},{no:"3.2.10",q:"Tangga disimpan secara horizontal"},{no:"3.2.11",q:"Tangga metal sudah diberi label Jangan Dipakai di Dekat Listrik"}]},oil_trap:{label:"Oil Trap / Washpad",kategori:"3. Fasilitas Penunjang",items:[{no:"3.3.1",q:"Saluran masukan ke trap berfungsi, tidak tersumbat"},{no:"3.3.2",q:"Dinding beton tidak retak dan tutup ruangan berfungsi"},{no:"3.3.3",q:"Lumpur tidak melebihi 1/4 kapasitas, aliran keluaran lancar"},{no:"3.3.4",q:"Katup & pipa berfungsi, tidak rusak, posisi tertutup"},{no:"3.3.5",q:"Rambu / demarkasi dan tanda keselamatan terlihat jelas"}]},eyewash:{label:"Eyewash",kategori:"4. Sarana K3",items:[{no:"4.1.1",q:"Akses dan jangkauan tidak ada penghalang"},{no:"4.1.2",q:"Air dengan volume sesuai kapasitas"},{no:"4.1.3",q:"Kualitas air baik dan bersih"},{no:"4.1.4",q:"Selang penyemprot tidak tersumbat"},{no:"4.1.5",q:"Posisi eyewash sesuai ergonomi"},{no:"4.1.6",q:"Beroperasi dengan baik secara kontinyu"}]},fbh:{label:"Full Body Harness",kategori:"4. Sarana K3",items:[{no:"4.2.1",q:"Buckle, ring-D, thimble tidak menajam, bunyi, atau retak"},{no:"4.2.2",q:"Buckle berfungsi dengan nyaman"},{no:"4.2.3",q:"Semua sabuk tidak berjumbai, kusut, robek, atau memudar"},{no:"4.2.4",q:"Webbing tidak terlipat menekan objek > 30mm"},{no:"4.2.5",q:"Label disertakan dan dapat dibaca keseluruhan"},{no:"4.2.6",q:"Disimpan di area bersih, sejuk, kering"},{no:"4.2.7",q:"Daya tahan lanyard baik, ujung tidak terurai"},{no:"4.2.8",q:"Sambungan pengait terpasang dengan benar"},{no:"4.2.9",q:"Gerbang pengait bergerak leluasa dan terkunci"},{no:"4.2.10",q:"Adjuster terpasang dengan benar"},{no:"4.2.11",q:"Daya tahan penyangga cukup kuat"},{no:"4.2.12",q:"Penyangga terlindung dan tidak robek / rusak"},{no:"4.2.13",q:"Semua temuan dan label peringatan sudah diperiksa"},{no:"4.2.14",q:"Tiap-tiap sistem komponen sudah diperiksa"},{no:"4.2.15",q:"Kondisi aman untuk digunakan"},{no:"4.2.16",q:"Hardware lifeline tidak ada distorsi atau korosi"},{no:"4.2.17",q:"Sambungan pengait lifeline terpasang dengan benar"},{no:"4.2.18",q:"Gerbang pengait lifeline bergerak leluasa dan terkunci"},{no:"4.2.19",q:"Tali sintetik tidak ada sayatan atau paparan kimia"},{no:"4.2.20",q:"Semua label peringatan lifeline sudah diperiksa"},{no:"4.2.21",q:"Tiap-tiap sistem lifeline sudah diperiksa"},{no:"4.2.22",q:"Lifeline aman untuk digunakan"}]},apar:{label:"APAR",kategori:"4. Sarana K3",items:[{no:"4.3.1",q:"APAR tersedia di lokasi yang ditentukan"},{no:"4.3.2",q:"Kapasitas APAR sesuai standar area"},{no:"4.3.3",q:"Jumlah APAR sesuai persyaratan"},{no:"4.3.4",q:"Kondisi hose (selang) baik, tidak retak / bocor"},{no:"4.3.5",q:"Kondisi tabung baik, tidak penyok / korosi"},{no:"4.3.6",q:"Kondisi gauge (tekanan) berada di zona hijau"},{no:"4.3.7",q:"Pin pengaman tersedia dan tersegel"}]}};
-
-/* ── STATE ── */
-var formStep=0,formId='',fotoFiles=[];
-
-/* ── INIT ── */
-document.addEventListener('DOMContentLoaded',function(){
-  formId=genId();
-  document.getElementById('fid-badge').textContent=formId;
-  document.getElementById('form-id-aside').textContent=formId;
-  document.getElementById('f-tanggal').value=new Date().toISOString().split('T')[0];
-  document.getElementById('today-lbl').textContent=new Date().toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-  renderList(LIST_DATA);
-  renderWaiting(WAITING_DATA);
-  renderOverdue(OVERDUE_DATA);
-  renderPicList();
+// ================================================================
+// INIT
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  startClock();
+  applyTheme(getSaved('ags_theme') || 'dark');
+  loadDashboard();
+  setupNav();
+  document.getElementById('hamburger').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+  });
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    applyTheme(cur === 'dark' ? 'light' : 'dark');
+  });
 });
 
-function genId(){var n=new Date();return'INS-'+n.getFullYear().toString().slice(-2)+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0')+'-'+Math.random().toString(36).slice(-4).toUpperCase();}
-
-/* ── NAVIGATION ── */
-function goNav(id,el){
-  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('on');});
-  document.getElementById('v-'+id).classList.add('on');
-  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
-  if(el)el.classList.add('active');
-  var titles={dashboard:'Dashboard',form:'Form Inspeksi Alat',waiting:'Waiting Inspection',list:'Riwayat Inspeksi',overdue:'Overdue',piclist:'List PIC Area'};
-  document.getElementById('page-title').textContent=titles[id]||id;
+// ================================================================
+// CLOCK
+// ================================================================
+function startClock() {
+  function tick() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('liveTime').textContent =
+      `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+    const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    document.getElementById('liveDate').textContent =
+      `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  }
+  tick(); setInterval(tick, 1000);
 }
 
-/* ── RENDER WAITING ── */
-function renderWaiting(data){
-  document.getElementById('waiting-body').innerHTML=data.map(function(d){
-    var pill=d.priority==='Segera'?'<span class="badge bg-red">Segera</span>':'<span class="badge bg-gray">Normal</span>';
-    return'<tr><td class="em">'+d.asset+'</td><td>'+d.loc+'</td><td>'+d.tool+'</td><td style="font-family:var(--mono);font-size:11px">'+d.jadwal+'</td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">'+d.last+'</td><td>'+pill+'</td><td><button class="btn" style="padding:4px 10px;font-size:12px" onclick="goNav(\'form\',null)">Inspeksi</button></td></tr>';
+// ================================================================
+// THEME
+// ================================================================
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+  document.getElementById('themeBtn').firstChild.textContent = t === 'dark' ? '🌙 ' : '☀️ ';
+  save('ags_theme', t);
+  // teruskan tema ke iframe Gold & Saham biar seragam
+  try { document.getElementById('sahamFrame').contentWindow.postMessage({ type:'ags-theme', theme:t }, '*'); } catch(e){}
+}
+
+// ================================================================
+// STORAGE (sessionStorage with fallback)
+// ================================================================
+function save(k, v) { try { sessionStorage.setItem(k, v); } catch(e) {} }
+function getSaved(k) { try { return sessionStorage.getItem(k); } catch(e) { return null; } }
+
+// ================================================================
+// API CALLS
+// ================================================================
+async function gasGet(action) {
+  if (GAS_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') return getMockData(action);
+  const res = await fetch(`${GAS_URL}?action=${action}`);
+  return res.json();
+}
+
+async function gasPost(body) {
+  if (GAS_URL === 'PASTE_YOUR_APPS_SCRIPT_URL_HERE') return { success: true, mock: true };
+  const res = await fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
+// ================================================================
+// MOCK DATA (saat GAS_URL belum diisi)
+// ================================================================
+function getMockData(action) {
+  if (action === 'getDashboard') return {
+    success: true,
+    data: {
+      greeting: getGreetingLocal(),
+      disciplineScore: 85,
+      mission: [
+        { label: 'Maksimal 2 Trade', target: 2, current: 2, done: true },
+        { label: 'Risk Maksimal 1%', target: 1, current: 1, done: true },
+        { label: 'Wajib Isi Journal', target: 1, current: 1, done: true },
+        { label: 'Tidak FOMO', done: true },
+        { label: 'Tunggu Candle Close', done: true },
+      ],
+      recentJournal: [
+        { ID:'TRD-001', Date:'28/06', Symbol:'XAUUSD', Direction:'Buy', Result:'Win', 'Profit/Loss':'+320', Time:'14:12' },
+        { ID:'TRD-002', Date:'28/06', Symbol:'BBCA', Direction:'Buy', Result:'Loss', 'Profit/Loss':'-150', Time:'11:05' },
+        { ID:'TRD-003', Date:'27/06', Symbol:'XAUUSD', Direction:'Sell', Result:'Win', 'Profit/Loss':'+280', Time:'16:45' },
+        { ID:'TRD-004', Date:'27/06', Symbol:'ANTM', Direction:'Buy', Result:'Win', 'Profit/Loss':'+90', Time:'13:22' },
+        { ID:'TRD-005', Date:'27/06', Symbol:'XAUUSD', Direction:'Buy', Result:'Loss', 'Profit/Loss':'-200', Time:'10:11' },
+      ],
+      upcomingPlans: [
+        { Time:'15:30', Flag:'🇺🇸', Name:'Core PCE Price Index (MoM)', Impact:'High' },
+        { Time:'19:30', Flag:'🇺🇸', Name:'Unemployment Claims', Impact:'Medium' },
+        { Time:'21:00', Flag:'🇺🇸', Name:'Pending Home Sales (MoM)', Impact:'Medium' },
+      ],
+      stats: { totalTrade: 120, winRate: 65, avgRR: 1.68, profitFactor: 1.72 }
+    }
+  };
+  if (action === 'getJournal') return { success: true, data: [] };
+  if (action === 'getStats') return { success: true, data: { totalTrade:120, winRate:65, avgRR:1.68, profitFactor:1.72, wins:78, losses:36, equity:[], strategies:[], sessions:{} } };
+  return { success: true, data: [] };
+}
+
+function getGreetingLocal() {
+  const h = new Date().getHours();
+  if(h<12) return 'Good Morning, Azis 👋';
+  if(h<15) return 'Good Afternoon, Azis 👋';
+  if(h<19) return 'Good Evening, Azis 👋';
+  return 'Good Night, Azis 👋';
+}
+
+// ================================================================
+// LOAD DASHBOARD
+// ================================================================
+async function loadDashboard() {
+  const res = await gasGet('getDashboard');
+  if (!res.success) return;
+  dashData = res.data;
+
+  // Greeting
+  document.getElementById('greeting').textContent = dashData.greeting || getGreetingLocal();
+
+  // Discipline
+  updateDiscipline(dashData.disciplineScore || 0);
+
+  // Mission
+  renderMission(dashData.mission || []);
+
+  // Recent Journal
+  renderRecentJournal(dashData.recentJournal || []);
+
+  // Market data from Twelve Data (Gold, USD/IDR, + Emas dalam Rupiah turunan)
+  fetchMarketData();
+
+  // News & impact
+  fetchGlobalNews();
+  fetchIndonesiaNews();
+  fetchCombinedNews();
+  fetchMarketImpact();
+}
+
+// ================================================================
+// DISCIPLINE RING
+// ================================================================
+function updateDiscipline(score) {
+  const arc = document.getElementById('discArc');
+  const num = document.getElementById('discNum');
+  const msg = document.getElementById('discMsg');
+  const circ = 188.5;
+  arc.style.strokeDashoffset = circ - (circ * score / 100);
+  arc.style.stroke = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--gold)' : 'var(--red)';
+  num.textContent = score + '%';
+  msg.textContent = score >= 80 ? 'Keep it up, Azis! 🔥' : score >= 50 ? 'Stay focused! 💪' : 'Perlu lebih disiplin ⚠️';
+}
+
+// ================================================================
+// RENDER MISSION
+// ================================================================
+function renderMission(missions) {
+  const el = document.getElementById('missionList');
+  el.innerHTML = missions.map(m => `
+    <div class="mission-item">
+      <div class="mission-done">
+        <span class="ico">${m.done ? '✅' : '⬜'}</span>
+        <span>${m.label}</span>
+      </div>
+      ${m.target !== undefined
+        ? `<span class="mission-badge ${m.done?'badge-green':'badge-gold'}">${m.current}/${m.target}</span>`
+        : `<span class="mission-badge ${m.done?'badge-green':'badge-gold'}">${m.done?'Done':'—'}</span>`
+      }
+    </div>
+  `).join('');
+}
+
+// ================================================================
+// RENDER RECENT JOURNAL
+// ================================================================
+function renderRecentJournal(rows) {
+  if (!rows.length) {
+    document.getElementById('recentJournal').innerHTML = '<div class="loading-state">Belum ada journal hari ini.</div>';
+    return;
+  }
+  const symColor = s => s.includes('XAU')?'#f0b429':s.includes('BCA')||s.includes('ANTM')||s.includes('BRI')?'#22c55e':'#3b82f6';
+  document.getElementById('recentJournal').innerHTML = `
+    <table class="tbl">
+      <thead><tr>
+        <th>MARKET</th><th>DIRECTION</th><th>RESULT</th><th>P/L (POINT)</th><th>TIME</th>
+      </tr></thead>
+      <tbody>${rows.map(r => {
+        const pl = parseFloat(r['Profit/Loss']||0);
+        return `<tr>
+          <td><span class="sym-icon" style="background:${symColor(r.Symbol||'')}">
+            ${(r.Symbol||'?').slice(0,2)}</span>${r.Symbol||'-'}</td>
+          <td class="${(r.Direction||'').toLowerCase()}">${r.Direction||'-'}</td>
+          <td class="${(r.Result||'open').toLowerCase()}">${r.Result||'Open'}</td>
+          <td class="${pl>=0?'pl-pos':'pl-neg'}">${pl>=0?'+':''}${r['Profit/Loss']||0}</td>
+          <td style="color:var(--muted);font-size:11px;">${r.Date||''} ${r.Time||''}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+}
+
+// ================================================================
+// RENDER UPCOMING
+// ================================================================
+function renderUpcoming(plans) {
+  const el = document.getElementById('upcomingFocus');
+  if (!plans.length) { el.innerHTML = '<div class="loading-state">Tidak ada event upcoming.</div>'; return; }
+  el.innerHTML = plans.map(p => `
+    <div class="news-item">
+      <span class="news-time">${p.Time||''}</span>
+      <span class="news-flag">${p.Flag||'🌐'}</span>
+      <span class="news-name">${p.Name||p.Plan||p.label||'-'}</span>
+      <span class="news-impact ${(p.Impact||p.Priority||'').toLowerCase()==='high'?'high':(p.Impact||p.Priority||'').toLowerCase()==='medium'?'med':'low'}"></span>
+      <span style="font-size:10px;color:var(--muted);">${p.Impact||p.Priority||''}</span>
+    </div>
+  `).join('') + `<div style="margin-top:10px;background:rgba(240,180,41,.08);border:1px solid rgba(240,180,41,.3);border-radius:8px;padding:8px 10px;font-size:11.5px;">
+    💡 <span style="color:var(--gold);font-weight:700;">Catatan:</span>
+    <span style="color:var(--muted);">Perhatikan volatilitas saat rilis berita high impact.</span>
+  </div>`;
+}
+
+// ================================================================
+// MARKET DATA (Twelve Data) — XAU/USD, USD/IDR, + Emas dalam Rupiah (turunan)
+// ================================================================
+async function fetchMarketData() {
+  await Promise.all([
+    fetchMarket('XAU/USD', 'gold'),
+    fetchMarket('USD/IDR', 'usd')
+  ]);
+  computeGoldIDR();
+}
+
+// Emas (IDR)/gram — turunan dari XAU/USD * USD/IDR, dikonversi troy ounce -> gram (1 troy oz = 31.1034768 g)
+function computeGoldIDR() {
+  const priceEl = document.getElementById('mkt-goldidr-price');
+  const chgEl   = document.getElementById('mkt-goldidr-chg');
+  const highEl  = document.getElementById('mkt-goldidr-high');
+  const lowEl   = document.getElementById('mkt-goldidr-low');
+  const gold = marketSnapshot.gold, usd = marketSnapshot.usd;
+  if (!gold || !usd || !gold.closes || !usd.closes) {
+    if (priceEl) priceEl.textContent = 'N/A';
+    if (chgEl) { chgEl.textContent = 'Menunggu data Gold & USD/IDR'; chgEl.style.color = 'var(--muted)'; }
+    return;
+  }
+  const GRAM_PER_OZ = 31.1034768;
+  const fmtIDR = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+
+  // seri harga emas per gram (IDR) dari perkalian dua seri closes (dipotong ke panjang terpendek)
+  const len = Math.min(gold.closes.length, usd.closes.length);
+  const series = [];
+  for (let i = 0; i < len; i++) {
+    series.push((gold.closes[i] / GRAM_PER_OZ) * usd.closes[i]);
+  }
+  const priceNow = series[series.length - 1];
+  const priceOpen = series[0];
+  const chg = priceNow - priceOpen;
+  const chgPct = (chg / priceOpen * 100).toFixed(2);
+  const dayHigh = Math.max(...series), dayLow = Math.min(...series);
+
+  if (priceEl) priceEl.textContent = fmtIDR(priceNow);
+  if (chgEl) {
+    chgEl.textContent = `${chg>=0?'+':''}${fmtIDR(chg)} (${chg>=0?'+':''}${chgPct}%)`;
+    chgEl.style.color = chg>=0?'var(--green)':'var(--red)';
+  }
+  if (highEl) highEl.textContent = `High ${fmtIDR(dayHigh)}`;
+  if (lowEl) lowEl.textContent = `Low ${fmtIDR(dayLow)}`;
+  drawSparkline('spark-goldidr', series, chg>=0?'#22c55e':'#ef4444');
+}
+
+async function fetchMarket(symbol, key) {
+  const priceEl = document.getElementById(`mkt-${key}-price`);
+  const chgEl   = document.getElementById(`mkt-${key}-chg`);
+  const highEl  = document.getElementById(`mkt-${key}-high`);
+  const lowEl   = document.getElementById(`mkt-${key}-low`);
+  try {
+    const url = `https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(symbol)}&interval=1h&outputsize=24&apikey=${TD_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data.values || !data.values.length) {
+      if (priceEl) priceEl.textContent = 'N/A';
+      if (chgEl) { chgEl.textContent = data.message || 'Data tidak tersedia'; chgEl.style.color = 'var(--muted)'; }
+      console.warn(`[fetchMarket] ${key} (${symbol}) gagal:`, data.message || data);
+      return;
+    }
+    const vals = [...data.values].reverse();
+    const price = parseFloat(vals[vals.length-1].close);
+    const open  = parseFloat(vals[0].open);
+    const chg   = price - open;
+    const chgPct = (chg/open*100).toFixed(2);
+    const closes = vals.map(v=>parseFloat(v.close));
+    const highs  = vals.map(v=>parseFloat(v.high));
+    const lows   = vals.map(v=>parseFloat(v.low));
+    const dayHigh = Math.max(...highs), dayLow = Math.min(...lows);
+    const fmt = n => n >= 1000 ? n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : n.toFixed(2);
+
+    if(priceEl) priceEl.textContent = fmt(price);
+    if(chgEl) {
+      chgEl.textContent = `${chg>=0?'+':''}${chg.toFixed(2)} (${chg>=0?'+':''}${chgPct}%)`;
+      chgEl.style.color = chg>=0?'var(--green)':'var(--red)';
+    }
+    if(highEl) highEl.textContent = `High ${fmt(dayHigh)}`;
+    if(lowEl) lowEl.textContent = `Low ${fmt(dayLow)}`;
+
+    // Sparkline
+    drawSparkline(`spark-${key}`, closes, chg>=0?'#22c55e':'#ef4444');
+
+    // simpan untuk Market Impact & turunan (Gold IDR)
+    marketSnapshot[key] = { price, chg, chgPct: parseFloat(chgPct), closes, dayHigh, dayLow };
+  } catch(e) {
+    console.error(key, e);
+    if (priceEl) priceEl.textContent = 'Error';
+    if (chgEl) { chgEl.textContent = 'Gagal ambil data'; chgEl.style.color = 'var(--red)'; }
+  }
+}
+
+// ================================================================
+// MARKET IMPACT — bias dihitung dari data harga real-time (Twelve Data)
+// ================================================================
+let marketSnapshot = {};
+// Catatan: Coal, Oil (WTI), dan IHSG TIDAK tersedia di paket gratis Twelve Data
+// (butuh plan berbayar / simbol tidak dikenali -> selalu N/A). Jadi 3 instrumen ini
+// diambil dari Yahoo Finance (gratis, via CORS proxy) alih-alih Twelve Data.
+const IMPACT_INSTRUMENTS = [
+  { key: 'gold',  symbol: 'XAU/USD', label: 'Gold (XAUUSD)',       icon: '🥇', iconBg: 'rgba(240,180,41,.18)', source: 'td' },
+  { key: 'usd',   symbol: 'USD/IDR', label: 'USD/IDR',             icon: '💵', iconBg: 'rgba(59,130,246,.18)', source: 'td' },
+  { key: 'coal',  symbol: 'MTF=F',   label: 'Coal (Newcastle)',    icon: '⚫', iconBg: 'rgba(107,127,107,.2)', source: 'yahoo' },
+  { key: 'oil',   symbol: 'CL=F',    label: 'Oil (WTI)',           icon: '🛢️', iconBg: 'rgba(239,68,68,.18)', source: 'yahoo' },
+  { key: 'ihsg',  symbol: '^JKSE',   label: 'IDX Composite (ICI)', icon: '🏢', iconBg: 'rgba(240,180,41,.18)', source: 'yahoo' },
+];
+
+// Ambil quote dari Yahoo Finance (gratis, tanpa API key) lewat CORS proxy yang sama
+// dipakai untuk scraping berita (allorigins). Dipakai untuk Coal, Oil (WTI), IHSG.
+async function fetchYahooQuote(symbol) {
+  const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=5d`;
+  const res = await fetch(CORS_PROXY + encodeURIComponent(yahooUrl));
+  if (!res.ok) throw new Error(`Yahoo Finance HTTP ${res.status}`);
+  const data = await res.json();
+  const result = data?.chart?.result?.[0];
+  const meta = result?.meta;
+  if (!meta || meta.regularMarketPrice == null) throw new Error('Yahoo Finance: data tidak tersedia untuk ' + symbol);
+  const price = meta.regularMarketPrice;
+  const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
+  const chg = price - prevClose;
+  const chgPct = prevClose ? parseFloat((chg/prevClose*100).toFixed(2)) : 0;
+  return { price, chg, chgPct };
+}
+
+async function fetchMarketImpact() {
+  // ambil instrumen yang belum ada datanya (oil, coal & ihsg belum diambil oleh fetchMarketData)
+  await Promise.all(IMPACT_INSTRUMENTS.filter(i => !marketSnapshot[i.key]).map(async i => {
+    try {
+      if (i.source === 'yahoo') {
+        marketSnapshot[i.key] = await fetchYahooQuote(i.symbol);
+        return;
+      }
+      const url = `https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(i.symbol)}&interval=1h&outputsize=24&apikey=${TD_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (!data.values || !data.values.length) return;
+      const vals = [...data.values].reverse();
+      const price = parseFloat(vals[vals.length-1].close);
+      const open  = parseFloat(vals[0].open);
+      const chg   = price - open;
+      const chgPct = parseFloat((chg/open*100).toFixed(2));
+      marketSnapshot[i.key] = { price, chg, chgPct };
+    } catch(e) { console.error('impact', i.key, e); }
+  }));
+  renderMarketImpact();
+}
+
+function renderMarketImpact() {
+  const el = document.getElementById('marketImpact');
+  const rows = IMPACT_INSTRUMENTS.map(i => {
+    const snap = marketSnapshot[i.key];
+    if (!snap) return `<div class="impact-row">
+      <div class="impact-icon" style="background:${i.iconBg};">${i.icon}</div>
+      <div class="impact-body"><div class="impact-top"><span>${i.label}</span><span style="color:var(--muted);">N/A</span></div></div>
+    </div>`;
+    // confidence: skala |%chg| jadi 50-95%, makin besar pergerakan makin "yakin"
+    const mag = Math.min(Math.abs(snap.chgPct), 2);
+    const confidence = Math.round(50 + (mag/2)*45);
+    const bias = snap.chgPct > 0.03 ? 'Bullish' : snap.chgPct < -0.03 ? 'Bearish' : 'Neutral';
+    const color = bias === 'Bullish' ? 'var(--green)' : bias === 'Bearish' ? 'var(--red)' : 'var(--gold)';
+    const arrow = bias === 'Bullish' ? '▲' : bias === 'Bearish' ? '▼' : '#';
+    return `<div class="impact-row">
+      <div class="impact-icon" style="background:${i.iconBg};">${i.icon}</div>
+      <div class="impact-body">
+        <div class="impact-top"><span>${i.label}</span><span style="color:${color};">${confidence}%</span></div>
+        <div class="impact-bias" style="color:${color};">${arrow} ${bias}</div>
+        <div class="impact-bar-bg"><div class="impact-bar-fill" style="width:${confidence}%;background:${color};"></div></div>
+      </div>
+    </div>`;
   }).join('');
-}
-function filterWaiting(q){
-  var query=(document.querySelector('#v-waiting .search-inp')||{value:''}).value.toLowerCase();
-  renderWaiting(WAITING_DATA.filter(function(d){return d.asset.toLowerCase().includes(query)||d.loc.toLowerCase().includes(query)||d.tool.toLowerCase().includes(query);}));
+  el.innerHTML = rows;
 }
 
-/* ── RENDER OVERDUE ── */
-function renderOverdue(data){
-  document.getElementById('overdue-body').innerHTML=data.map(function(d){
-    var cls=d.hari>=30?'bg-red':d.hari>=14?'bg-orange':'bg-yellow';
-    return'<tr><td class="em" style="color:var(--red)">'+d.asset+'</td><td>'+d.loc+'</td><td>'+d.tool+'</td><td><span class="badge bg-gray">'+d.tipe+'</span></td><td><span class="badge '+cls+'">'+d.hari+' hari</span></td><td>'+d.pic+'</td><td><button class="btn" style="padding:4px 10px;font-size:12px;color:var(--red);border-color:var(--red)" onclick="showToast(\'Menghubungi '+d.pic+' 📞\')">Hubungi</button></td></tr>';
-  }).join('');
+// ================================================================
+// NEWS — NewsData.io
+// Global Market News: query umum (en)
+// Berita Indonesia: domain Bloomberg Technoz (bloombergtechnoz.com)
+// Market News (Combined): domain CNBC Indonesia (cnbcindonesia.com)
+// ================================================================
+const NEWS_TAG_COLOR = {
+  business: { bg:'rgba(34,197,94,.15)', c:'var(--green)' },
+  economy: { bg:'rgba(168,85,247,.18)', c:'#c084fc' },
+  world: { bg:'rgba(59,130,246,.18)', c:'var(--blue)' },
+  politics: { bg:'rgba(59,130,246,.18)', c:'var(--blue)' },
+  top: { bg:'rgba(240,180,41,.18)', c:'var(--gold)' },
+  gold: { bg:'rgba(240,180,41,.18)', c:'var(--gold)' },
+  forex: { bg:'rgba(59,130,246,.18)', c:'var(--blue)' },
+  commodities: { bg:'rgba(239,68,68,.15)', c:'var(--red)' },
+  stock: { bg:'rgba(34,197,94,.15)', c:'var(--green)' },
+  default: { bg:'rgba(107,127,107,.2)', c:'var(--muted)' },
+};
+
+// Klasifikasi kategori berita berdasarkan keyword di judul (Bahasa Indonesia + Inggris)
+// Dipakai khusus untuk Market News (Combined) karena sumbernya di-scrape live
+// dan tidak punya kategori bawaan seperti NewsData.io.
+const NEWS_CATEGORY_RULES = [
+  { cat: 'gold',        re: /\b(emas|gold|xau|antam|logam mulia|bullion)\b/i },
+  { cat: 'forex',       re: /\b(dolar|rupiah|kurs|forex|valas|usd\/idr|nilai tukar|yen|euro|valuta asing)\b/i },
+  { cat: 'commodities', re: /\b(komoditas|batu ?bara|coal|minyak|oil|cpo|sawit|nikel|timah|karet|gas|lng|migas)\b/i },
+  { cat: 'stock',       re: /\b(saham|ihsg|bei|emiten|ipo|dividen|bursa|delisting|stock split|buyback saham)\b/i },
+  { cat: 'economy',     re: /\b(ekonomi|inflasi|suku bunga|bi rate|bi-rate|pertumbuhan|resesi|apbn|pajak|ekspor|impor|pdb|gdp|neraca|fiskal|moneter|the fed)\b/i },
+];
+function classifyNewsCategory(title) {
+  const t = title || '';
+  const cats = NEWS_CATEGORY_RULES.filter(r => r.re.test(t)).map(r => r.cat);
+  return cats.length ? cats : ['economy'];
 }
-function filterOverdue(q){
-  var query=(document.querySelector('#v-overdue .search-inp')||{value:''}).value.toLowerCase();
-  renderOverdue(OVERDUE_DATA.filter(function(d){return d.asset.toLowerCase().includes(query)||d.loc.toLowerCase().includes(query);}));
+function tagStyle(cat) {
+  const t = NEWS_TAG_COLOR[(cat||'').toLowerCase()] || NEWS_TAG_COLOR.default;
+  return `background:${t.bg};color:${t.c};`;
+}
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr.replace(' ', 'T') + 'Z');
+  if (isNaN(d)) return dateStr;
+  const diffMin = Math.round((Date.now() - d.getTime())/60000);
+  if (diffMin < 1) return 'Baru saja';
+  if (diffMin < 60) return `${diffMin} menit lalu`;
+  const diffH = Math.round(diffMin/60);
+  if (diffH < 24) return `${diffH} jam lalu`;
+  return `${Math.round(diffH/24)} hari lalu`;
 }
 
-/* ── RENDER PIC LIST ── */
-function renderPicList(){
-  function initials(n){return n.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();}
-  var colors=['#2563eb','#7c3aed','#db2777','#059669','#d97706','#dc2626','#0891b2','#65a30d'];
-  function renderGroup(pics,containerId){
-    document.getElementById(containerId).innerHTML=pics.map(function(p,i){
-      var c=colors[i%colors.length];
-      var emailHtml=p.email?'<div class="pic-email">'+p.email+'</div>':'<div class="pic-email" style="color:var(--text3)">— belum ada email</div>';
-      return'<div class="pic-card"><div class="pic-ava" style="background:'+c+'">'+initials(p.nama)+'</div><div style="min-width:0"><div class="pic-name">'+p.nama+'</div><div class="pic-area">'+p.area+'</div>'+emailHtml+'</div><div class="pic-status"><span class="badge bg-green" style="font-size:10px">Aktif</span></div></div>';
-    }).join('');
+function renderNewsList(elId, items, emptyMsg) {
+  const el = document.getElementById(elId);
+  if (!items.length) { el.innerHTML = `<div class="loading-state">${emptyMsg}</div>`; return; }
+  el.innerHTML = items.map(n => `
+    <div class="news-row">
+      ${n.image_url ? `<img class="news-thumb" src="${n.image_url}" onerror="this.style.display='none'" />` : ''}
+      <div class="news-row-body">
+        <div class="news-row-title">${n.link ? `<a href="${n.link}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;">${n.title || ''}</a>` : (n.title || '')}</div>
+        <div class="news-row-meta">
+          <span>${n.source_id || n.source || ''}</span>${n.pubDate ? `<span>•</span><span>${timeAgo(n.pubDate)}</span>` : ''}
+        </div>
+      </div>
+      ${n.category && n.category[0] ? `<span class="news-row-tag" style="${tagStyle(n.category[0])}">${n.category[0]}</span>` : ''}
+    </div>
+  `).join('');
+}
+
+// Global Market News — gabungan kanal finansial terkemuka Amerika + Asia via NewsData.io.
+// Free/Basic plan NewsData.io cuma boleh maks 5 domain per query, jadi dipecah
+// jadi 2 request (Amerika & Asia) lalu digabung di client.
+const GLOBAL_NEWS_QUERY = 'market OR stocks OR economy OR inflation OR "interest rate" OR trade';
+const GLOBAL_NEWS_DOMAIN_GROUPS = [
+  { region: 'US', domains: 'reuters.com,bloomberg.com,cnbc.com,wsj.com,marketwatch.com' },
+  { region: 'Asia', domains: 'asia.nikkei.com,scmp.com,channelnewsasia.com,japantimes.co.jp,straitstimes.com' },
+];
+
+async function fetchGlobalNews() {
+  document.getElementById('globalNews').innerHTML = '<div class="loading-state"><span class="spinner"></span> Loading dari kanal Amerika & Asia...</div>';
+  try {
+    const settled = await Promise.allSettled(
+      GLOBAL_NEWS_DOMAIN_GROUPS.map(g => {
+        const url = `https://newsdata.io/api/1/latest?apikey=${NEWSDATA_KEY}&q=${encodeURIComponent(GLOBAL_NEWS_QUERY)}&language=en&domainurl=${g.domains}`;
+        return fetch(url).then(async r => {
+          const data = await r.json();
+          if (data.status !== 'success') throw new Error(data.message || `NewsData error (${g.region})`);
+          return data.results || [];
+        });
+      })
+    );
+
+    let all = [];
+    const failedRegions = [];
+    settled.forEach((res, i) => {
+      const g = GLOBAL_NEWS_DOMAIN_GROUPS[i];
+      if (res.status === 'fulfilled') all = all.concat(res.value);
+      else { failedRegions.push(g.region); console.warn(`[globalNews] gagal ambil kanal ${g.region}:`, res.reason && res.reason.message); }
+    });
+
+    if (!all.length) throw new Error('Semua region gagal dimuat: ' + (failedRegions.join(', ') || 'unknown error'));
+
+    // Dedupe by link/title
+    const seen = new Set();
+    all = all.filter(n => {
+      const key = n.link || (n.title||'').toLowerCase().trim();
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Selang-seling per source_id biar tidak numpuk 1 outlet doang di atas
+    all = interleaveBySource(all.map(n => ({ ...n, source_id: n.source_id || n.source_name || 'global' })));
+
+    newsCache.global = all.slice(0, 16);
+    renderNewsList('globalNews', newsCache.global, 'Tidak ada berita global.');
+    if (failedRegions.length) console.warn('[globalNews] sebagian region gagal:', failedRegions.join(', '));
+  } catch(e) {
+    console.error('globalNews', e);
+    document.getElementById('globalNews').innerHTML = `<div class="loading-state" style="color:var(--red);">Gagal memuat berita global.<br><span style="font-size:10px;color:var(--muted);word-break:break-all;">${e.message || ''}</span></div>`;
   }
-  renderGroup(PIC_OPTIONS.KGB,'pic-grid-kgb');
-  renderGroup(PIC_OPTIONS.GRB,'pic-grid-grb');
 }
 
-/* ── RENDER LIST ── */
-function badgeCls(s){return{Lulus:'bg-green',Perhatian:'bg-yellow',Gagal:'bg-red',Draft:'bg-blue'}[s]||'bg-gray';}
-function dotClr(s){return{Lulus:'var(--green)',Perhatian:'var(--yellow)',Gagal:'var(--red)',Draft:'var(--accent)'}[s]||'var(--text2)';}
-function renderList(data){
-  document.getElementById('list-body').innerHTML=data.map(function(d){
-    return'<tr><td class="em">'+d.no+'</td><td>'+d.loc+'</td><td>'+d.tool+'</td><td style="font-family:var(--mono);font-size:11px">'+d.asset+'</td><td><span class="badge '+badgeCls(d.status)+'"><span class="bdot" style="background:'+dotClr(d.status)+'"></span>'+d.status+'</span></td><td style="font-family:var(--mono);font-size:11px;color:var(--text3)">'+d.date+'</td><td><button class="btn" style="padding:4px 10px;font-size:12px" onclick="showToast(\'Detail '+d.no+' 📋\')">Detail</button></td></tr>';
-  }).join('');
-}
-function filterList(q){
-  var query=(document.querySelector('#v-list .search-inp')||{value:''}).value.toLowerCase();
-  renderList(LIST_DATA.filter(function(d){return d.no.toLowerCase().includes(query)||d.loc.toLowerCase().includes(query)||d.tool.toLowerCase().includes(query);}));
-}
+// ================================================================
+// LIVE SCRAPING — Bloomberg Technoz & CNBC Indonesia
+// (NewsData.io tidak meng-index domain ini, jadi kita ambil langsung
+// dari halaman beritanya. Dicoba lewat 2 metode berurutan supaya lebih tahan
+// banting: 1) r.jina.ai reader (convert halaman ke markdown bersih — lebih
+// stabil untuk situs berat/JS-heavy), 2) fallback ke
+// CORS proxy + parsing DOM mentah kalau metode pertama gagal.
+// ================================================================
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const JINA_READER = 'https://r.jina.ai/';
 
-/* ── FORM STEPS ── */
-function showFStep(i){
-  [0,1,2].forEach(function(n){var el=document.getElementById('fstep-'+n);if(el)el.style.display=(n===i?'block':'none');});
-  formStep=i;
-  for(var j=0;j<3;j++){
-    var dot=document.getElementById('sd'+j),lbl=document.getElementById('sl'+j),line=document.getElementById('sline'+j);
-    if(j<i){dot.className='fsh-dot done';dot.textContent='✓';lbl.className='fsh-lbl done';if(line)line.className='fsh-line done';}
-    else if(j===i){dot.className='fsh-dot active';dot.textContent=(j+1);lbl.className='fsh-lbl active';if(line)line.className='fsh-line';}
-    else{dot.className='fsh-dot';dot.textContent=(j+1);lbl.className='fsh-lbl';if(line)line.className='fsh-line';}
+// Metode 1: r.jina.ai — return markdown bersih berisi baris [Judul](URL)
+async function scrapeViaJinaReader(pageUrl, sourceLabel, linkPattern, limit) {
+  const res = await fetch(JINA_READER + pageUrl);
+  if (!res.ok) throw new Error(`Jina reader HTTP ${res.status}`);
+  const text = await res.text();
+  if (!text || text.length < 200) throw new Error('Jina reader mengembalikan konten kosong.');
+  const re = /\[([^\[\]]{10,160})\]\((https?:\/\/[^\s)]+)\)/g;
+  const seen = new Set();
+  const items = [];
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const title = m[1].trim().replace(/\s+/g, ' ');
+    const link = m[2].trim();
+    if (!linkPattern.test(link)) continue;
+    if (seen.has(link)) continue;
+    if (/^(image|foto|photo)\s*[:\-]/i.test(title)) continue;
+    seen.add(link);
+    items.push({ title, link, image_url: '', source_id: sourceLabel, pubDate: '' });
+    if (items.length >= limit) break;
   }
-  document.getElementById('v-form').scrollTop=0;
+  if (!items.length) throw new Error('Jina reader: tidak ada judul+link yang cocok pola.');
+  return items;
 }
-function fsNext(){
-  if(formStep===0){
-    var req=['f-tanggal','f-nama','f-sn','f-pit','f-asset'];
-    for(var i=0;i<req.length;i++){var el=document.getElementById(req[i]);if(!el.value.trim()){el.focus();el.style.borderColor='var(--red)';(function(e){setTimeout(function(){e.style.borderColor='';},2000);})(el);showToast('⚠️ Field wajib belum diisi!');return;}}
-    if(!getSubArea()){showToast('⚠️ Sub area wajib diisi!');return;}
-    if(!getPicArea()){showToast('⚠️ PIC Area wajib dipilih!');return;}
-    var tool=getToolVal();if(!tool){showToast('⚠️ Pilih jenis tools terlebih dahulu!');return;}
-    buildChecklist(tool);showFStep(1);return;
+
+// Metode 2 (fallback): CORS proxy + parsing anchor DOM mentah
+async function scrapeViaDomProxy(pageUrl, sourceLabel, linkPattern, limit) {
+  const proxied = CORS_PROXY + encodeURIComponent(pageUrl);
+  const res = await fetch(proxied);
+  if (!res.ok) throw new Error(`HTTP ${res.status} saat mengambil ${pageUrl} (lewat proxy)`);
+  const html = await res.text();
+  if (!html || html.length < 200) throw new Error('Proxy mengembalikan halaman kosong, coba refresh lagi.');
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  const anchors = Array.from(doc.querySelectorAll('a[href]'));
+  const seen = new Set();
+  const items = [];
+  for (const a of anchors) {
+    let href = a.getAttribute('href') || '';
+    if (!href) continue;
+    try { href = new URL(href, pageUrl).href; } catch(e) { continue; }
+    if (!linkPattern.test(href)) continue;
+    if (seen.has(href)) continue;
+    const img = a.querySelector('img');
+    let title = (a.textContent || '').trim().replace(/\s+/g, ' ');
+    if (img) {
+      const alt = (img.getAttribute('alt') || '').trim();
+      if (alt && title.startsWith(alt)) title = title.slice(alt.length).trim();
+    }
+    if (!title || title.length < 8) continue;
+    seen.add(href);
+    items.push({
+      title,
+      link: href,
+      image_url: img ? (img.getAttribute('src') || img.getAttribute('data-src') || '') : '',
+      source_id: sourceLabel,
+      pubDate: ''
+    });
+    if (items.length >= limit) break;
   }
-  if(formStep===1){if(hasNG())showFStep(2);else doSubmitForm();return;}
-}
-function fsPrev(){if(formStep>0)showFStep(formStep-1);}
-
-/* ── AREA DROPDOWNS ── */
-function updateArea(){
-  var area=document.getElementById('f-pit').value;
-  var subSel=document.getElementById('f-sub');
-  var subs=SUB_AREAS[area]||[];
-  subSel.innerHTML='<option value="">- Pilih Sub Area -</option>'+subs.map(function(s){return'<option value="'+s+'">'+s+'</option>';}).join('');
-  document.getElementById('f-sub-manual').style.display='none';document.getElementById('f-sub-manual').value='';document.getElementById('sub-toggle').textContent='+ Input manual';subSel.style.display='';subSel.required=true;
-  var picSel=document.getElementById('f-pic');var pics=PIC_OPTIONS[area]||[];
-  picSel.innerHTML='<option value="">- Pilih PIC Area -</option>'+pics.map(function(p){return'<option value="'+p.nama+'" data-email="'+p.email+'">'+p.nama+' — '+p.area+'</option>';}).join('');
-  document.getElementById('f-pic-manual').style.display='none';document.getElementById('f-pic-manual').value='';document.getElementById('pic-toggle').textContent='+ Input manual';picSel.style.display='';picSel.required=true;
-}
-function toggleSubManual(){var sel=document.getElementById('f-sub'),inp=document.getElementById('f-sub-manual'),btn=document.getElementById('sub-toggle');if(inp.style.display!=='none'){inp.style.display='none';inp.value='';sel.style.display='';sel.required=true;inp.required=false;btn.textContent='+ Input manual';}else{sel.style.display='none';sel.required=false;inp.style.display='';inp.required=true;inp.focus();btn.textContent='Kembali ke daftar';}}
-function togglePicManual(){var sel=document.getElementById('f-pic'),inp=document.getElementById('f-pic-manual'),btn=document.getElementById('pic-toggle');if(inp.style.display!=='none'){inp.style.display='none';inp.value='';sel.style.display='';sel.required=true;inp.required=false;btn.textContent='+ Input manual';}else{sel.style.display='none';sel.required=false;inp.style.display='';inp.required=true;inp.focus();btn.textContent='Kembali ke daftar';}}
-function getSubArea(){var inp=document.getElementById('f-sub-manual');return inp.style.display!=='none'?inp.value.trim():document.getElementById('f-sub').value;}
-function getPicArea(){var inp=document.getElementById('f-pic-manual');return inp.style.display!=='none'?inp.value.trim():document.getElementById('f-pic').value;}
-function getPicEmail(){var inp=document.getElementById('f-pic-manual');if(inp.style.display!=='none')return'';var sel=document.getElementById('f-pic');var opt=sel.options[sel.selectedIndex];return opt?(opt.getAttribute('data-email')||''):'';}
-function getToolVal(){var c=document.querySelector('input[name="jenisTool"]:checked');return c?c.value:'';}
-
-/* ── CHECKLIST ── */
-function buildChecklist(tool){
-  var cl=CL[tool];if(!cl)return;
-  document.getElementById('aside-tool-lbl').textContent=cl.label;
-  document.getElementById('aside-asset-lbl').textContent='Asset: '+document.getElementById('f-asset').value;
-  function renderItems(items){return items.map(function(item){var n='cl_'+tool+'_'+item.no.split('.').join('_');return'<div class="cl-item"><div><div class="cl-no">'+item.no+'</div><div class="cl-text">'+item.q+'</div></div><div class="yn"><input type="radio" name="'+n+'" id="'+n+'_ya" value="Ya"><label for="'+n+'_ya">Ya</label><input type="radio" name="'+n+'" id="'+n+'_tdk" value="Tidak"><label for="'+n+'_tdk">Tidak</label><input type="radio" name="'+n+'" id="'+n+'_na" value="NA"><label for="'+n+'_na">N/A</label></div></div>';}).join('');}
-  var html='<div class="fsec-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Checklist — '+cl.label+'</div>';
-  if(cl.subs){cl.subs.forEach(function(sub){html+='<div class="fsec-subtitle">'+sub.label+'</div><div class="cl-header"><span>Item Pemeriksaan</span><span>Ya / Tidak / N/A</span></div>'+renderItems(sub.items);});}
-  else{html+='<div class="cl-header"><span>Item Pemeriksaan</span><span>Ya / Tidak / N/A</span></div>'+renderItems(cl.items);}
-  var container=document.getElementById('cl-container');container.innerHTML=html;
-  container.querySelectorAll('input[type=radio]').forEach(function(r){r.addEventListener('change',function(){updateClStats();checkNg();updateClNextBtn();});});
-  updateClStats();updateClNextBtn();
-}
-function hasNG(){return document.querySelectorAll('#cl-container input[value="Tidak"]:checked').length>0;}
-function checkNg(){
-  hasNG()?document.getElementById('ng-alert').classList.add('show'):document.getElementById('ng-alert').classList.remove('show');
-  var ng=document.querySelectorAll('#cl-container input[value="Tidak"]:checked'),nos=[];
-  ng.forEach(function(r){nos.push(r.name.split('_').slice(-3).join('.').replace(/_/g,'.'));});
-  document.getElementById('sum-ng').textContent=nos.length?nos.join(', '):'-';
-}
-function updateClNextBtn(){
-  var btn=document.getElementById('btn-cl-next');if(!btn)return;
-  if(hasNG()){btn.innerHTML='Lanjut — Isi Detail Temuan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px"><polyline points="9 18 15 12 9 6"/></svg>';btn.className='btn btn-primary';}
-  else{btn.innerHTML='Submit Langsung <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:13px;height:13px;vertical-align:-2px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>';btn.className='btn btn-green';}
-}
-function updateClStats(){
-  var tool=getToolVal();var cl=CL[tool];if(!cl)return;
-  var allItems=[];if(cl.subs){cl.subs.forEach(function(s){s.items.forEach(function(it){allItems.push(it);});});}else{allItems=cl.items;}
-  var total=allItems.length,ya=0,tdk=0,na=0;
-  allItems.forEach(function(item){var n='cl_'+tool+'_'+item.no.split('.').join('_');var chk=document.querySelector('input[name="'+n+'"]:checked');if(chk){if(chk.value==='Ya')ya++;else if(chk.value==='Tidak')tdk++;else na++;}});
-  var done=ya+tdk+na,pct=total?Math.round((done/total)*100):0;
-  document.getElementById('cl-pct').textContent=pct+'%';document.getElementById('cl-fill').style.width=pct+'%';
-  document.getElementById('cl-ya').textContent=ya;document.getElementById('cl-tdk').textContent=tdk;document.getElementById('cl-na').textContent=na;document.getElementById('cl-blm').textContent=total-done;
+  if (!items.length) throw new Error('Tidak ada artikel yang berhasil di-parse (kemungkinan struktur halaman berubah atau diblokir proxy).');
+  return items;
 }
 
-/* ── FOTO ── */
-function handleFoto(input){
-  var files=Array.prototype.slice.call(input.files,0,3);fotoFiles=files;
-  var prev=document.getElementById('foto-preview');prev.innerHTML='';
-  files.forEach(function(file,idx){var reader=new FileReader();reader.onload=function(e){prev.innerHTML+='<div class="fp-item"><img src="'+e.target.result+'"><button class="fp-del" onclick="removeFoto('+idx+')">×</button></div>';};reader.readAsDataURL(file);});
-  document.getElementById('foto-status').textContent=files.length+' foto dipilih';document.getElementById('foto-status').className='foto-status done';
-}
-function removeFoto(idx){fotoFiles.splice(idx,1);if(!fotoFiles.length){document.getElementById('foto-preview').innerHTML='';document.getElementById('foto-status').textContent='';document.getElementById('foto-input').value='';}else{var dt=new DataTransfer();fotoFiles.forEach(function(f){dt.items.add(f);});document.getElementById('foto-input').files=dt.files;handleFoto({files:fotoFiles});}}
-function fileToBase64(file){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(e){res({base64:e.target.result.split(',')[1],mimeType:file.type,name:file.name});};r.onerror=function(){rej(new Error('Gagal'));};r.readAsDataURL(file);});}
-function prepFoto(){return new Promise(function(resolve){if(!fotoFiles.length){resolve([]);return;}var st=document.getElementById('foto-status');st.textContent='Menyiapkan foto...';st.className='foto-status uploading';Promise.all(fotoFiles.map(fileToBase64)).then(function(fd){st.textContent=fotoFiles.length+' foto siap';st.className='foto-status done';resolve(fd);});});}
-
-/* ── SUBMIT ── */
-function collectEAV(){var tool=getToolVal();var cl=CL[tool];var hdr={form_id:formId,tanggal:document.getElementById('f-tanggal').value,nama_inspektor:document.getElementById('f-nama').value.trim(),sn_inspektor:document.getElementById('f-sn').value.trim(),pit_area:document.getElementById('f-pit').value,sub_area:getSubArea(),pic_area:getPicArea(),pic_email:getPicEmail(),kategori:cl.kategori,jenis_tools:cl.label,no_asset:document.getElementById('f-asset').value.trim(),no_register:document.getElementById('f-reg').value.trim()};var allItems=[];if(cl.subs){cl.subs.forEach(function(s){s.items.forEach(function(it){allItems.push({no:it.no,q:it.q,subsec:s.label});});});}else{allItems=cl.items.map(function(it){return{no:it.no,q:it.q,subsec:'-'};});}return allItems.map(function(item){var n='cl_'+tool+'_'+item.no.split('.').join('_');var chk=document.querySelector('input[name="'+n+'"]:checked');var row=Object.assign({},hdr);row.no_kategori=item.no;row.subsection=item.subsec||'-';row.pertanyaan=item.q;row.status=chk?chk.value:'Belum Dicek';return row;});}
-function doSubmitForm(){
-  var btn=document.getElementById('btn-submit');if(btn)btn.disabled=true;
-  document.getElementById('sp').style.display='block';document.getElementById('btn-submit-txt').style.opacity='0.6';
-  if(hasNG()&&fotoFiles.length===0){showToast('⚠️ Foto temuan wajib min. 1 foto!');if(btn)btn.disabled=false;document.getElementById('sp').style.display='none';document.getElementById('btn-submit-txt').style.opacity='1';return;}
-  function doSend(filesData){
-    var rows=collectEAV();var ngList=rows.filter(function(r){return r.status==='Tidak';}).map(function(r){return r.no_kategori;});
-    var temuan=ngList.length?{ada_temuan:'Ya',item_tidak:ngList.join(', '),risiko:(document.querySelector('input[name="risiko"]:checked')||{value:'-'}).value,deskripsi:document.getElementById('t-desc').value.trim(),rekomendasi:document.getElementById('t-rek').value.trim(),status_aset:document.getElementById('t-status').value,catatan:document.getElementById('t-catatan').value.trim(),status_temuan:'Open',foto_files:filesData,foto_links:'',pic_area:getPicArea(),pic_email:getPicEmail()}:{ada_temuan:'Tidak'};
-    var payload={form_id:formId,timestamp:new Date().toISOString(),tbl:'inspeksi',eav_rows:rows,temuan:temuan};
-    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(function(){showOv(true);}).catch(function(){showOv(false);});
-    if(btn)btn.disabled=false;document.getElementById('sp').style.display='none';document.getElementById('btn-submit-txt').style.opacity='1';
+async function scrapeSiteHeadlines(pageUrl, sourceLabel, linkPattern, limit = 10) {
+  try {
+    return await scrapeViaJinaReader(pageUrl, sourceLabel, linkPattern, limit);
+  } catch(e1) {
+    console.warn(`[scrape] Jina reader gagal untuk ${sourceLabel}:`, e1.message);
+    try {
+      return await scrapeViaDomProxy(pageUrl, sourceLabel, linkPattern, limit);
+    } catch(e2) {
+      console.warn(`[scrape] DOM proxy juga gagal untuk ${sourceLabel}:`, e2.message);
+      throw new Error(`${e1.message} | ${e2.message}`);
+    }
   }
-  if(hasNG())prepFoto().then(doSend);else doSend([]);
 }
-function showOv(ok){document.getElementById('ov-i').textContent=ok?'✅':'❌';document.getElementById('ov-t').textContent=ok?'Berhasil Dikirim!':'Gagal Mengirim';document.getElementById('ov-t').className='ov-title '+(ok?'ok':'err');document.getElementById('ov-m').textContent=ok?('ID: '+formId+'\nData tersimpan ke spreadsheet.'):'Cek koneksi internet dan coba lagi.';document.getElementById('ov').classList.add('show');}
-function resetFormFull(){document.getElementById('ov').classList.remove('show');document.querySelectorAll('#v-form input[type=text],#v-form textarea').forEach(function(el){el.value='';});document.querySelectorAll('#v-form input[type=radio]').forEach(function(el){el.checked=false;});document.querySelectorAll('#v-form select').forEach(function(el){el.selectedIndex=0;});document.getElementById('f-tanggal').value=new Date().toISOString().split('T')[0];document.getElementById('cl-container').innerHTML='';document.getElementById('ng-alert').classList.remove('show');document.getElementById('foto-preview').innerHTML='';document.getElementById('foto-status').textContent='';fotoFiles=[];formId=genId();document.getElementById('fid-badge').textContent=formId;document.getElementById('form-id-aside').textContent=formId;showFStep(0);}
 
-/* ── TOAST ── */
-var tT;function showToast(msg){var el=document.getElementById('toast-el');document.getElementById('toast-txt').textContent=msg;el.classList.add('show');clearTimeout(tT);tT=setTimeout(function(){el.classList.remove('show');},3000);}
+// Berita Indonesia — sumber: Bloomberg Technoz (live scrape, bukan via NewsData.io)
+async function fetchIndonesiaNews() {
+  document.getElementById('indoNews').innerHTML = '<div class="loading-state"><span class="spinner"></span> Loading...</div>';
+  try {
+    const items = await scrapeSiteHeadlines('https://www.bloombergtechnoz.com/', 'Bloomberg Technoz', /\/detail-news\/\d+\//, 8);
+    newsCache.indo = items;
+    renderNewsList('indoNews', items, 'Tidak ada berita dari Bloomberg Technoz.');
+  } catch(e) {
+    console.error('indoNews', e);
+    document.getElementById('indoNews').innerHTML = `<div class="loading-state" style="color:var(--red);">Gagal memuat berita Bloomberg Technoz.<br><span style="font-size:10px;color:var(--muted);word-break:break-all;">${e.message || ''}</span></div>`;
+  }
+}
+
+// Market News (Combined) — gabungan beberapa kanal berita market/ekonomi Indonesia
+// (live scrape, bukan via NewsData.io). Tiap kanal punya pola URL artikel sendiri
+// supaya hasil scrape-nya presisi ke halaman berita, bukan menu/navigasi.
+const COMBINED_NEWS_SOURCES = [
+  { url: 'https://www.cnbcindonesia.com/market', label: 'CNBC Indonesia', pattern: /cnbcindonesia\.com\/market\/\d{14}-\d+-\d+\//, limit: 12 },
+  { url: 'https://finance.detik.com/', label: 'Detik Finance', pattern: /finance\.detik\.com\/[a-z0-9\-]+\/d-\d+\//, limit: 10 },
+  { url: 'https://www.cnnindonesia.com/ekonomi', label: 'CNN Indonesia', pattern: /cnnindonesia\.com\/ekonomi\/\d{14}-\d+-\d+\//, limit: 10 },
+];
+
+// Selang-seling item per sumber (round robin) supaya list gabungan tidak
+// numpuk semua dari 1 kanal duluan baru kanal berikutnya.
+function interleaveBySource(items) {
+  const groups = {}; const order = [];
+  items.forEach(it => {
+    const k = it.source_id || 'unknown';
+    if (!groups[k]) { groups[k] = []; order.push(k); }
+    groups[k].push(it);
+  });
+  const result = []; let i = 0; let more = true;
+  while (more) {
+    more = false;
+    for (const k of order) { if (groups[k][i]) { result.push(groups[k][i]); more = true; } }
+    i++;
+  }
+  return result;
+}
+
+async function fetchCombinedNews() {
+  document.getElementById('combinedNews').innerHTML = '<div class="loading-state"><span class="spinner"></span> Loading dari semua kanal...</div>';
+  const settled = await Promise.allSettled(
+    COMBINED_NEWS_SOURCES.map(s => scrapeSiteHeadlines(s.url, s.label, s.pattern, s.limit))
+  );
+
+  let all = [];
+  const failed = [];
+  settled.forEach((res, i) => {
+    const src = COMBINED_NEWS_SOURCES[i];
+    if (res.status === 'fulfilled') {
+      all = all.concat(res.value);
+    } else {
+      failed.push(src.label);
+      console.warn(`[combinedNews] gagal ambil dari ${src.label}:`, res.reason && res.reason.message);
+    }
+  });
+
+  // Dedupe judul (kadang beberapa kanal memberitakan hal yang sama persis / duplikat internal)
+  const seen = new Set();
+  all = all.filter(n => {
+    const key = (n.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Klasifikasi kategori per judul berita
+  all.forEach(n => { n.category = classifyNewsCategory(n.title); });
+
+  all = interleaveBySource(all);
+
+  if (!all.length) {
+    document.getElementById('combinedNews').innerHTML = `<div class="loading-state" style="color:var(--red);">Gagal memuat berita dari semua kanal (${COMBINED_NEWS_SOURCES.map(s=>s.label).join(', ')}).</div>`;
+    return;
+  }
+
+  newsCache.combined = all;
+  window._combinedNewsAll = all;
+  if (failed.length) {
+    console.warn('[combinedNews] sebagian kanal gagal dimuat:', failed.join(', '));
+  }
+  filterCombinedNews(window._combinedNewsActiveCat || '', document.querySelector('.news-tab.active'));
+}
+
+function filterCombinedNews(cat, tabEl) {
+  window._combinedNewsActiveCat = cat;
+  if (tabEl) {
+    document.querySelectorAll('.news-tab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+  const all = window._combinedNewsAll || [];
+  const filtered = cat ? all.filter(n => (n.category||[]).some(c => c.toLowerCase().includes(cat)) || (n.title||'').toLowerCase().includes(cat)) : all;
+  renderNewsList('combinedNews', filtered.slice(0, 20), 'Tidak ada berita untuk kategori ini.');
+}
+
+function drawSparkline(id, data, color) {
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth || 120;
+  canvas.height = 36;
+  const min = Math.min(...data), max = Math.max(...data), range = max-min||1;
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();
+  data.forEach((v,i) => {
+    const x = (i/(data.length-1))*w;
+    const y = h - ((v-min)/range)*(h-4) - 2;
+    i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+  // Fill
+  ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
+  ctx.fillStyle = color+'22'; ctx.fill();
+}
+
+// ================================================================
+// LOAD JOURNAL PAGE
+// ================================================================
+async function loadJournalPage() {
+  const res = await gasGet('getJournal');
+  if(res.success) { journals = res.data; renderJournalTable(journals); }
+}
+
+function renderJournalTable(rows) {
+  if(!rows.length) {
+    document.getElementById('journalTable').innerHTML = '<div class="loading-state">Belum ada journal. Tap "+ New Entry" untuk mulai.</div>';
+    return;
+  }
+  document.getElementById('journalTable').innerHTML = `
+    <table class="tbl">
+      <thead><tr>
+        <th>ID</th><th>DATE</th><th>SYMBOL</th><th>DIR</th><th>ENTRY</th>
+        <th>SL</th><th>TP</th><th>RISK%</th><th>RR</th>
+        <th>RESULT</th><th>P/L</th><th>STRATEGY</th><th>ACTION</th>
+      </tr></thead>
+      <tbody>${rows.map(r => {
+        const pl = parseFloat(r['Profit/Loss']||0);
+        return `<tr>
+          <td style="font-family:var(--mono);font-size:10px;color:var(--muted);">${r.ID||'-'}</td>
+          <td style="font-size:11px;white-space:nowrap;">${r.Date||''} ${r.Time||''}</td>
+          <td><b>${r.Symbol||'-'}</b></td>
+          <td class="${(r.Direction||'').toLowerCase()}">${r.Direction||'-'}</td>
+          <td style="font-family:var(--mono);">${r.Entry||'-'}</td>
+          <td style="font-family:var(--mono);color:var(--red);">${r.Stop_Loss||'-'}</td>
+          <td style="font-family:var(--mono);color:var(--green);">${r.Take_profit||'-'}</td>
+          <td>${r['Risk(%)']||'-'}%</td>
+          <td style="font-family:var(--mono);">${r.RR||'-'}</td>
+          <td class="${(r.Result||'open').toLowerCase()}">${r.Result||'Open'}</td>
+          <td class="${pl>=0?'pl-pos':'pl-neg'}">${pl>=0?'+':''}${r['Profit/Loss']||0}</td>
+          <td style="font-size:11px;color:var(--muted);">${r.Strategy||'-'}</td>
+          <td>
+            <button class="btn btn-ghost" style="font-size:10px;padding:3px 8px;" onclick="editJournal('${r.ID}')">✏️</button>
+            <button class="btn btn-red" style="font-size:10px;padding:3px 8px;" onclick="deleteJournal('${r.ID}')">🗑</button>
+          </td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+}
+
+function applyFilter() {
+  const market = document.getElementById('filterMarket').value;
+  const result = document.getElementById('filterResult').value;
+  const date   = document.getElementById('filterDate').value;
+  let filtered = [...journals];
+  if(market) filtered = filtered.filter(r => r.Market===market || r.Symbol===market);
+  if(result) filtered = filtered.filter(r => r.Result===result);
+  if(date) { const d = new Date(date); const ds = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`; filtered = filtered.filter(r => r.Date===ds); }
+  renderJournalTable(filtered);
+}
+
+function clearFilter() {
+  document.getElementById('filterMarket').value='';
+  document.getElementById('filterResult').value='';
+  document.getElementById('filterDate').value='';
+  renderJournalTable(journals);
+}
+
+// ================================================================
+// LOAD STATISTICS
+// ================================================================
+async function loadStats() {
+  const res = await gasGet('getStats');
+  if(!res.success) return;
+  const d = res.data;
+  document.getElementById('statsContent').innerHTML = `
+    <div class="grid-4 mb-14">
+      <div class="card stats-card"><div class="stat-num">${d.totalTrade||0}</div><div class="stat-label">Total Trade</div></div>
+      <div class="card stats-card"><div class="stat-num" style="color:${parseFloat(d.winRate)>=60?'var(--green)':'var(--red)'};">${d.winRate||0}%</div><div class="stat-label">Win Rate</div></div>
+      <div class="card stats-card"><div class="stat-num">${d.avgRR||0}</div><div class="stat-label">Avg R:R</div></div>
+      <div class="card stats-card"><div class="stat-num" style="color:var(--gold);">${d.profitFactor||0}</div><div class="stat-label">Profit Factor</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">📊 Win/Loss</div>
+        <div style="display:flex;gap:20px;align-items:center;padding:10px 0;">
+          <div style="text-align:center;"><div style="font-size:32px;font-weight:800;color:var(--green);">${d.wins||0}</div><div style="font-size:11px;color:var(--muted);">WIN</div></div>
+          <div style="flex:1;height:12px;background:var(--panel2);border-radius:6px;overflow:hidden;">
+            <div style="height:100%;width:${d.totalTrade?((d.wins||0)/d.totalTrade*100).toFixed(0):0}%;background:var(--green);border-radius:6px;"></div>
+          </div>
+          <div style="text-align:center;"><div style="font-size:32px;font-weight:800;color:var(--red);">${d.losses||0}</div><div style="font-size:11px;color:var(--muted);">LOSS</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">🏆 Best Strategy</div>
+        ${(d.strategies||[]).slice(0,3).map(s=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px;">
+            <span>${s.name}</span>
+            <span style="font-family:var(--mono);color:var(--green);font-weight:700;">${s.winRate}% <span style="color:var(--muted);font-size:10px;">(${s.total} trade)</span></span>
+          </div>`).join('') || '<div style="color:var(--muted);font-size:12px;padding:10px 0;">Belum ada data.</div>'}
+      </div>
+    </div>`;
+}
+
+// ================================================================
+// JOURNAL MODAL
+// ================================================================
+function openModal(type) {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'New Journal Entry';
+  document.getElementById('submitBtn').textContent = '💾 Save Entry';
+  // Reset form
+  ['f-market','f-symbol','f-direction','f-timeframe','f-entry','f-sl','f-tp','f-risk','f-rr','f-result','f-pl','f-emotion','f-strategy','f-conf','f-lesson','f-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = el.tagName==='SELECT'?el.options[0]?.value:id==='f-risk'?'1':id==='f-conf'?'75':'';
+  });
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function editJournal(id) {
+  const row = journals.find(r=>r.ID===id);
+  if(!row) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Journal — ' + id;
+  document.getElementById('submitBtn').textContent = '💾 Update Entry';
+  const set = (fid, val) => { const el=document.getElementById(fid); if(el) el.value=val||''; };
+  set('f-market', row.Market); set('f-symbol', row.Symbol);
+  set('f-direction', row.Direction); set('f-timeframe', row.Timeframe);
+  set('f-entry', row.Entry); set('f-sl', row.Stop_Loss);
+  set('f-tp', row.Take_profit); set('f-risk', row['Risk(%)']);
+  set('f-rr', row.RR); set('f-result', row.Result);
+  set('f-pl', row['Profit/Loss']); set('f-emotion', row.Emotion);
+  set('f-strategy', row.Strategy); set('f-conf', row.Confidence);
+  set('f-lesson', row.Lession_Learned); set('f-notes', row.Noted);
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e) {
+  if(e && e.target !== document.getElementById('modalOverlay')) return;
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+async function submitJournal() {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '⏳ Saving...';
+  const data = {
+    Market: document.getElementById('f-market').value,
+    Symbol: document.getElementById('f-symbol').value,
+    Direction: document.getElementById('f-direction').value,
+    Timeframe: document.getElementById('f-timeframe').value,
+    Entry: document.getElementById('f-entry').value,
+    Stop_Loss: document.getElementById('f-sl').value,
+    Take_profit: document.getElementById('f-tp').value,
+    'Risk(%)': document.getElementById('f-risk').value,
+    RR: document.getElementById('f-rr').value,
+    Result: document.getElementById('f-result').value,
+    'Profit/Loss': document.getElementById('f-pl').value,
+    Emotion: document.getElementById('f-emotion').value,
+    Strategy: document.getElementById('f-strategy').value,
+    Confidence: document.getElementById('f-conf').value,
+    Lession_Learned: document.getElementById('f-lesson').value,
+    Noted: document.getElementById('f-notes').value,
+  };
+  try {
+    let res;
+    if(editingId) {
+      res = await gasPost({ action:'updateJournal', id:editingId, data });
+    } else {
+      res = await gasPost({ action:'addJournal', data });
+    }
+    if(res.success||res.mock) {
+      showToast(editingId?'Journal diupdate! ✅':'Journal disimpan! ✅');
+      closeModal();
+      loadJournalPage();
+      loadDashboard();
+    } else { showToast('Gagal menyimpan: '+(res.error||'Unknown error'), true); }
+  } catch(e) { showToast('Error: '+e.message, true); }
+  btn.disabled=false; btn.textContent=editingId?'💾 Update Entry':'💾 Save Entry';
+}
+
+async function deleteJournal(id) {
+  if(!confirm('Hapus journal '+id+'?')) return;
+  const res = await gasPost({ action:'deleteJournal', id });
+  if(res.success||res.mock) { showToast('Journal dihapus!'); loadJournalPage(); }
+  else showToast('Gagal menghapus', true);
+}
+
+// ================================================================
+// NAVIGATION
+// ================================================================
+function setupNav() {
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const page = el.dataset.page;
+      switchPage(page);
+      document.getElementById('sidebar').classList.remove('open');
+    });
+  });
+}
+
+function switchPage(page) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page===page));
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('page-'+page);
+  if(target) target.classList.add('active');
+
+  if(page==='journal') loadJournalPage();
+  if(page==='statistics') loadStats();
+}
+
+// expose ke iframe anak (gold.html / saham.html) supaya tombol "Kembali ke Dashboard"
+// di dalam iframe bisa memanggil navigasi SPA induk (postMessage, same-origin safe)
+window.addEventListener('message', (ev) => {
+  if (!ev.data || typeof ev.data !== 'object') return;
+  if (ev.data.type === 'ags-navigate' && ev.data.page) {
+    switchPage(ev.data.page);
+  }
+});
+
+// ================================================================
+// TOAST
+// ================================================================
+function showToast(msg, isError=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError?' error':'');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 </script>
 </body>
 </html>
